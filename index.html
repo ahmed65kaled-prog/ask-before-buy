@@ -3,47 +3,46 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b6fad">
-<title>اسأل قبل ما تشتري - مصر</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css">
+<title>اسأل قبل ما تشتري 🇪🇬</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
-body{font-family:system-ui;background:#f1f5f9;margin:0;padding:12px}
-.card{background:#fff;border-radius:22px;padding:20px;max-width:500px;margin:20px auto;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-h1{margin:0;text-align:center;font-size:22px}
-.sub{color:#64748b;text-align:center;font-size:13px;margin:8px 0 14px}
-input{width:100%;padding:16px;border:2px solid #0f172a;border-radius:14px;font-size:18px}
-.btn-scan{width:100%;padding:16px;background:#0f172a;color:#fff;border:0;border-radius:14px;font-weight:800;font-size:18px;margin-top:10px}
-.btn{display:block;width:100%;padding:14px;border-radius:12px;text-align:center;text-decoration:none;font-weight:800;margin:8px 0}
-.c{background:#004ea8;color:#fff}.a{background:#ff9900;color:#000}.j{background:#f68b1e;color:#fff}.n{background:#feee00;color:#000}
+*{box-sizing:border-box}body{margin:0;padding:12px;background:#f1f5f9;font-family:system-ui}
+.card{max-width:520px;margin:20px auto;background:#fff;border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+h1{text-align:center;margin:0 0 4px;font-size:23px}
+.sub{text-align:center;color:#64748b;font-size:13px;margin-bottom:16px}
+.btn-cam{width:100%;padding:18px;background:#16a34a;color:#fff;border:0;border-radius:16px;font-size:19px;font-weight:900}
+#reader{margin-top:14px;border-radius:16px;overflow:hidden;display:none}
+input{width:100%;margin-top:12px;padding:14px;border:2px solid #e2e8f0;border-radius:12px;font-size:16px;text-align:center}
+.btn-search{width:100%;margin-top:8px;padding:12px;background:#0f172a;color:#fff;border:0;border-radius:12px;font-weight:700}
+.link{display:block;padding:13px;border-radius:12px;text-align:center;text-decoration:none;font-weight:800;margin:8px 0;color:#fff}
+.c{background:#004ea8}.a{background:#ff9900;color:#000}.j{background:#f68b1e}.n{background:#feee00;color:#000}
+.box{margin-top:16px;padding:14px;background:#f0fdf4;border:2px solid #16a34a;border-radius:14px}
 </style>
 </head>
 <body>
 <div class="card">
 <h1>🇪🇬 اسأل قبل ما تشتري</h1>
-<p class="sub">اكتب الباركود 622 وشوف سعره الحقيقي في مصر</p>
-<input id="q" placeholder="مثال: 6223001360056" value="6223001360056">
-<button class="btn-scan" onclick="go()">🔍 ابحث في مصر</button>
+<p class="sub">صوّر الباركود وشوف سعره الحقيقي قبل ما تدفع</p>
+<button class="btn-cam" onclick="startScan()">📷 صوّر الباركود الآن</button>
+<div id="reader"></div>
+<input id="q" placeholder="أو اكتب الرقم هنا: 622..." value="6223001360056">
+<button class="btn-search" onclick="go()">🔍 ابحث يدوياً</button>
 <div id="r"></div>
-<p style="text-align:center;color:#94a3b8;font-size:11px;margin-top:16px">لو بدأ بـ 622 = منتج مصري ✔️</p>
 </div>
 <script>
+let qr;
 function go(){
  let v=document.getElementById('q').value.trim()||'6223001360056';
  let e=encodeURIComponent(v);
- let egy=v.startsWith('622')?'<span style="background:#16a34a;color:#fff;padding:2px 8px;border-radius:99px;font-size:12px">✔ مصري</span>':'';
- document.getElementById('r').innerHTML=`
- <div style="margin-top:18px;padding:14px;background:#f0fdf4;border:2px solid #16a34a;border-radius:14px">
- <p><b>${v}</b> ${egy}</p>
- <a class="btn c" href="https://www.carrefouregypt.com/search?q=${e}" target="_blank">🛒 كارفور مصر</a>
- <a class="btn a" href="https://www.amazon.eg/s?k=${e}" target="_blank">📦 أمازون مصر</a>
- <a class="btn j" href="https://www.jumia.com.eg/catalog/?q=${e}" target="_blank">🟠 جوميا مصر</a>
- <a class="btn n" href="https://www.noon.com/egypt/search?q=${e}" target="_blank">🟡 نون مصر</a>
- <a class="btn" style="background:#111;color:#fff" href="https://www.google.com/search?q=${e}+site:carrefouregypt.com+OR+site:amazon.eg+OR+site:jumia.com.eg" target="_blank">🔎 بحث شامل</a>
- </div>`;
+ let badge=v.startsWith('622')?'<span style="background:#16a34a;color:#fff;padding:3px 9px;border-radius:99px;font-size:12px">✔ مصري 622</span>':'<span style="background:#ef4444;color:#fff;padding:3px 9px;border-radius:99px;font-size:12px">⚠️ مستورد</span>';
+ document.getElementById('r').innerHTML=`<div class=box><p><b>${v}</b> ${badge}</p><a class=link href="https://www.carrefouregypt.com/search?q=${e}" target=_blank>🛒 كارفور مصر</a><a class=link href="https://www.amazon.eg/s?k=${e}" target=_blank>📦 أمازون مصر</a><a class=link href="https://www.jumia.com.eg/catalog/?q=${e}" target=_blank>🟠 جوميا</a><a class=link href="https://www.noon.com/egypt/search?q=${e}" target=_blank>🟡 نون</a></div>`;
+}
+function startScan(){
+ document.getElementById('reader').style.display='block';
+ if(!qr) qr=new Html5Qrcode("reader");
+ qr.start({facingMode:"environment"},{fps:10,qrbox:250},(d)=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';go();},()=>{}).catch(()=>alert("لازم تفتح الموقع من https://ask-before-buy.pages.dev عشان الكاميرا تشتغل"));
 }
 go();
 </script>
 </body>
 </html>
-
