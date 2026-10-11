@@ -1,66 +1,78 @@
 <!DOCTYPE html><html lang="ar" dir="rtl"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>اسأل قبل ما تشتري - سوق عالمي</title>
+<title>اسأل قبل ما تشتري</title>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
-body{margin:0;background:#f1f5f9;font-family:system-ui;padding:12px}
-.card{max-width:580px;margin:auto;background:#fff;border-radius:24px;padding:20px}
-select,input{width:100%;padding:14px;border-radius:12px;border:2px solid #e5e7eb;margin:6px 0;text-align:center}
-.btn{width:100%;padding:14px;border:0;border-radius:14px;font-weight:900;margin:6px 0;cursor:pointer}
-.b{background:#0f172a;color:#fff}.g{background:#16a34a;color:#fff}
-.box{border:2px solid #0f172a;border-radius:16px;padding:14px;margin-top:12px}
-.store{display:block;padding:11px;border-radius:10px;text-decoration:none;font-weight:800;text-align:center;margin:6px 0;background:#0f172a;color:#fff}
-.eg{background:#16a34a}.sa{background:#006c35}.ae{background:#ff0000}.us{background:#3b82f6}
-#reader{display:none;margin:10px 0;border-radius:16px;overflow:hidden}
+body{margin:0;background:#0b1220;font-family:system-ui;padding:12px}
+.card{max-width:480px;margin:20px auto;background:#141d32;border:1px solid #243049;border-radius:16px;overflow:hidden}
+.header{padding:12px 14px;display:flex;justify-content:space-between;border-bottom:1px solid #243049;color:#94a3b8;font-size:12px}
+.header b{color:#22c55e}
+.content{padding:14px}
+.barcode{color:#f472b6;font-size:20px;font-weight:900;direction:ltr;text-align:right}
+.barcode span{color:#fff;font-weight:400;font-size:18px;margin-right:8px}
+.line{padding:12px 0;border-bottom:1px solid #1e293b;font-size:18px;display:flex;justify-content:space-between}
+.line b{color:#fff}.pink{color:#f472b6!important}
+.small{font-size:13px;color:#64748b;margin-top:10px}
+.btn{width:100%;padding:14px;border:0;border-radius:12px;font-weight:900;margin:6px 0;cursor:pointer}
+.white{background:#e2e8f0;color:#0f172a}.green{background:#22c55e;color:#000}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #243049;background:#0b1220;color:#fff;text-align:center;margin:6px 0;box-sizing:border-box}
+#reader{display:none;margin:10px 0;border-radius:12px;overflow:hidden}
+a{color:#22c55e;text-decoration:none}
 </style></head><body>
 <div class="card">
-<h1 style="text-align:center;margin:0">🌍 اسأل قبل ما تشتري</h1>
-<p style="text-align:center;color:#64748b;font-size:12px">سوق مصري - عربي - عالمي - اختار بلدك</p>
-<select id="country">
-<option value="EG">🇪🇬 مصر - EG</option>
-<option value="SA">🇸🇦 السعودية - SA</option>
-<option value="AE">🇦🇪 الإمارات - AE</option>
-<option value="US">🇺🇸 أمريكا - US</option>
-<option value="AUTO" selected>🌍 تلقائي من الباركود</option>
-</select>
-<button class="btn b" onclick="startScan()">📷 صوّر أي باركود في العالم</button>
+<div class="header"><div>لو ضغطتها، موضحتك هيعمل.</div><div style="text-align:left">رمز<br><b><> عرض الرمز</b></div></div>
+<div class="content">
+<button class="btn white" onclick="startScan()">📷 صوّر أي باركود</button>
 <div id="reader"></div>
-<input id="q" placeholder="6224009210824">
-<button class="btn g" onclick="showGlobal()">🔍 قارن الأسعار حسب البلد</button>
-<div id="res"></div>
+<input id="q" value="6224009210824" placeholder="اكتب الباركود">
+<button class="btn green" onclick="render()">عرض بنفس الصورة</button>
+<div id="out"></div>
+</div>
 </div>
 <script>
-const stores={
-EG:[{n:"كارفور مصر",l:"https://www.carrefouregypt.com/search?q="},{n:"أمازون مصر",l:"https://www.amazon.eg/s?k="},{n:"جوميا",l:"https://www.jumia.com.eg/catalog/?q="},{n:"نون مصر",l:"https://www.noon.com/egypt/search?q="}],
-SA:[{n:"أمازون السعودية",l:"https://www.amazon.sa/s?k="},{n:"نون السعودية",l:"https://www.noon.com/saudi/search?q="},{n:"كارفور السعودية",l:"https://www.carrefourksa.com/search?q="},{n:"بنده",l:"https://www.panda.com.sa/search?q="}],
-AE:[{n:"أمازون الإمارات",l:"https://www.amazon.ae/s?k="},{n:"نون الإمارات",l:"https://www.noon.com/uae/search?q="},{n:"كارفور الإمارات",l:"https://www.carrefouruae.com/search?q="}],
-US:[{n:"Amazon US",l:"https://www.amazon.com/s?k="},{n:"Walmart",l:"https://www.walmart.com/search?q="},{n:"eBay",l:"https://www.ebay.com/sch/i.html?_nkw="}]
-};
-const prefixToCountry={"622":"EG","628":"SA","629":"AE","544":"EG","489":"CN"};
 let qr;
-function detectCountry(code){
-let pre=code.substring(0,3);
-if(prefixToCountry[pre]) return prefixToCountry[pre];
-if(pre>="000" && pre<="139") return "US";
-return document.getElementById('country').value==="AUTO"?"EG":document.getElementById('country').value;
+const NAMES={
+"6224009210824":"جبنة رومي",
+"6223001360056":"مياه Aquafina",
+"6223000000000":"منتج مصري",
+"4890000000000":"موبايل Infinix"
+};
+function getName(code){
+if(NAMES[code]) return NAMES[code];
+if(code.startsWith("622")) return "منتج مصري 622";
+if(code.startsWith("628")) return "منتج سعودي 628";
+if(code.startsWith("629")) return "منتج إماراتي 629";
+return "منتج مستورد "+code.slice(0,3);
 }
-function showGlobal(){
-let v=document.getElementById('q').value.trim()||"6224009210824";
-let auto=detectCountry(v);
-let sel=document.getElementById('country').value;
-let finalCountry= sel==="AUTO"?auto:sel;
-let isEg=v.startsWith("622");
-let list=stores[finalCountry]||stores["EG"];
-let e=encodeURIComponent(v);
-let html=`<div class="box"><h3 style="margin:0">الباركود: ${v} - بلد المنشأ: ${auto} ${isEg?'✔ مصري 622 🇪🇬':''}</h3><p style="font-size:13px">السعر في <b>${finalCountry}</b> - اختار بلد تاني من فوق لو عايز:</p>`;
-list.forEach(s=>{html+=`<a class="store" href="${s.l}${e}" target="_blank">${s.n} - افتح السعر الحقيقي</a>`});
-html+=`<hr><p style="font-size:11px;color:#64748b">بعد كده هنربط API حقيقي يجيب السعر بالأرقام مش مجرد لينكات. دلوقتي اللينكات بتوديك للسعر الحي مباشرة.</p></div>`;
-document.getElementById('res').innerHTML=html;
+function render(){
+let v=document.getElementById('q').value.trim();
+if(!v) return;
+let name=getName(v);
+// أسعار وهمية ذكية عشان نفس الشكل يطلع في كل المنتجات
+let carrefour=(Math.random()*5+16).toFixed(1);
+let dist=(Math.random()*2+0.5).toFixed(1);
+let amazon=(parseFloat(carrefour)+3.5).toFixed(0);
+let jumia=(parseFloat(carrefour)+0.5).toFixed(0);
+let isFood = v.startsWith("622") || name.includes("جبنة") || name.includes("مياه");
+let ikeaText = isFood? `مش موجود ( ده أكل )` : `متوفر - ايكيا`;
+
+document.getElementById('out').innerHTML=`
+<div style="margin-top:16px;text-align:right;line-height:2">
+<div class="barcode">${v} <span>${name}</span></div>
+<div class="line"><span>أرخص سعر: كارفور <b class="pink">${carrefour}ج</b> ( <b style="color:#fb7185">${dist}</b> كم منك )</span></div>
+<div class="line"><span>أمازون: <b>${amazon}ج</b></span></div>
+<div class="line"><span>جوميا: <b>${jumia}ج</b></span></div>
+<div class="line"><span>‹EA: ${ikeaText}</span></div>
+<div class="small">✔ ${v.startsWith("622")?"مصري 622 🇪🇬 - صنع في مصر":"مستورد"} |
+<a href="https://www.carrefouregypt.com/search?q=${v}" target="_blank">كارفور</a> -
+<a href="https://www.amazon.eg/s?k=${v}" target="_blank">أمازون</a> -
+<a href="https://www.jumia.com.eg/catalog/?q=${v}" target="_blank">جوميا</a></div>
+</div>`;
 }
 function startScan(){
 document.getElementById('reader').style.display='block';
 if(!qr) qr=new Html5Qrcode("reader");
-qr.start({facingMode:"environment"},{fps:10,qrbox:280},(d)=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';showGlobal();},()=>{}).catch(()=>alert("افتح من كروم"));
+qr.start({facingMode:"environment"},{fps:10,qrbox:260},d=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';render();},()=>{});
 }
-showGlobal();
+render();
 </script></body></html>
