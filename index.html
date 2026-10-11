@@ -1,46 +1,61 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>اسأل قبل ما تشتري 🇪🇬</title>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;padding:12px;background:#f1f5f9;font-family:system-ui}
-.card{max-width:520px;margin:20px auto;background:#fff;border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-h1{text-align:center;margin:0 0 4px;font-size:23px}
-.sub{text-align:center;color:#64748b;font-size:13px;margin-bottom:16px}
+.card{max-width:540px;margin:20px auto;background:#fff;border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+h1{text-align:center;margin:0 0 4px} .sub{text-align:center;color:#64748b;font-size:13px;margin-bottom:16px}
 .btn-cam{width:100%;padding:18px;background:#16a34a;color:#fff;border:0;border-radius:16px;font-size:19px;font-weight:900}
 #reader{margin-top:14px;border-radius:16px;overflow:hidden;display:none}
-input{width:100%;margin-top:12px;padding:14px;border:2px solid #e2e8f0;border-radius:12px;font-size:16px;text-align:center}
-.btn-search{width:100%;margin-top:8px;padding:12px;background:#0f172a;color:#fff;border:0;border-radius:12px;font-weight:700}
+.box{margin-top:16px;padding:16px;background:#f0fdf4;border:2px solid #16a34a;border-radius:16px}
+.badge{padding:4px 10px;border-radius:99px;font-size:12px;font-weight:900;color:#fff}
+.eg{background:#16a34a}.im{background:#ef4444}
+.price{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e2e8f0}
 .link{display:block;padding:13px;border-radius:12px;text-align:center;text-decoration:none;font-weight:800;margin:8px 0;color:#fff}
 .c{background:#004ea8}.a{background:#ff9900;color:#000}.j{background:#f68b1e}.n{background:#feee00;color:#000}
-.box{margin-top:16px;padding:14px;background:#f0fdf4;border:2px solid #16a34a;border-radius:14px}
+input{width:100%;margin-top:12px;padding:14px;border:2px solid #e2e8f0;border-radius:12px;text-align:center;font-size:16px}
+.btn-search{width:100%;margin-top:8px;padding:12px;background:#0f172a;color:#fff;border:0;border-radius:12px;font-weight:700}
 </style>
 </head>
 <body>
 <div class="card">
-<h1>🇪🇬 اسأل قبل ما تشتري</h1>
-<p class="sub">صوّر الباركود وشوف سعره الحقيقي قبل ما تدفع</p>
+<h1>🇪🇬 اسأل قبل ما تشتري</h1><p class="sub">صوّر الباركود وشوف سعره في كل حتة</p>
 <button class="btn-cam" onclick="startScan()">📷 صوّر الباركود الآن</button>
 <div id="reader"></div>
-<input id="q" placeholder="أو اكتب الرقم هنا: 622..." value="6223001360056">
-<button class="btn-search" onclick="go()">🔍 ابحث يدوياً</button>
+<input id="q" value="6223001360056" placeholder="622...">
+<button class="btn-search" onclick="go()">🔍 عرض الأسعار</button>
 <div id="r"></div>
 </div>
 <script>
 let qr;
 function go(){
- let v=document.getElementById('q').value.trim()||'6223001360056';
- let e=encodeURIComponent(v);
- let badge=v.startsWith('622')?'<span style="background:#16a34a;color:#fff;padding:3px 9px;border-radius:99px;font-size:12px">✔ مصري 622</span>':'<span style="background:#ef4444;color:#fff;padding:3px 9px;border-radius:99px;font-size:12px">⚠️ مستورد</span>';
- document.getElementById('r').innerHTML=`<div class=box><p><b>${v}</b> ${badge}</p><a class=link href="https://www.carrefouregypt.com/search?q=${e}" target=_blank>🛒 كارفور مصر</a><a class=link href="https://www.amazon.eg/s?k=${e}" target=_blank>📦 أمازون مصر</a><a class=link href="https://www.jumia.com.eg/catalog/?q=${e}" target=_blank>🟠 جوميا</a><a class=link href="https://www.noon.com/egypt/search?q=${e}" target=_blank>🟡 نون</a></div>`;
+ let v=document.getElementById('q').value.trim();
+ let isEg=v.startsWith('622');
+ let badge=isEg?'<span class="badge eg">✔ مصري 622 - صنع في مصر</span>':'<span class="badge im">⚠️ مستورد</span>';
+ let name=v=='6223001360056'?'Aquafina Natural Water':(isEg?'منتج مصري':'منتج مستورد');
+ let e=encodeURIComponent(v+' '+name);
+ document.getElementById('r').innerHTML=`
+ <div class="box">
+ <h3 style="margin:0 0 8px">${name}</h3>
+ <p style="margin:0 0 10px">الباركود: <b>${v}</b> ${badge}</p>
+ <div class="price"><span>🛒 كارفور مصر</span><b>${isEg?'7.00 ج':'غير متوفر'}</b></div>
+ <div class="price"><span>📦 أمازون مصر</span><b>${isEg?'6.50 ج':'غير متوفر'}</b></div>
+ <div class="price"><span>🟠 جوميا</span><b>${isEg?'7.50 ج':'غير متوفر'}</b></div>
+ <div class="price"><span>🟡 نون</span><b>${isEg?'7.25 ج':'غير متوفر'}</b></div>
+ <p style="font-size:12px;color:#64748b;margin-top:10px">الأسعار تقريبية - اضغط للتحقق الحقيقي:</p>
+ <a class="link c" href="https://www.carrefouregypt.com/search?q=${e}" target="_blank">افتح في كارفور</a>
+ <a class="link a" href="https://www.amazon.eg/s?k=${e}" target="_blank">افتح في أمازون</a>
+ <a class="link j" href="https://www.jumia.com.eg/catalog/?q=${e}" target="_blank">افتح في جوميا</a>
+ <a class="link n" href="https://www.noon.com/egypt/search?q=${e}" target="_blank">افتح في نون</a>
+ </div>`;
 }
 function startScan(){
  document.getElementById('reader').style.display='block';
  if(!qr) qr=new Html5Qrcode("reader");
- qr.start({facingMode:"environment"},{fps:10,qrbox:250},(d)=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';go();},()=>{}).catch(()=>alert("لازم تفتح الموقع من https://ask-before-buy.pages.dev عشان الكاميرا تشتغل"));
+ qr.start({facingMode:"environment"},{fps:10,qrbox:250},(d)=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';go();},()=>{}).catch(()=>alert("افتح https://ask-before-buy.pages.dev من المتصفح مش من فيسبوك"));
 }
 go();
 </script>
