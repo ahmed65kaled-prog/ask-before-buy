@@ -1,86 +1,68 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>قبل ما تشتري... اسال.</title>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>اسأل قبل ما تشتري - عالمي</title>
 <style>
-body{margin:0;background:#eef2f7;font-family:system-ui;padding:10px}
-.card{max-width:520px;margin:10px auto;background:#fff;border-radius:20px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
-.btn{width:100%;padding:16px;border:0;border-radius:14px;background:#0f172a;color:#fff;font-weight:900;margin:6px 0;font-size:16px}
-.btn2{width:70px;padding:14px;border:0;border-radius:12px;background:#0f172a;color:#fff;font-weight:900}
-input{flex:1;padding:14px;border-radius:12px;border:2px solid #e2e8f0;text-align:center}
-.dark{background:#0f172a;border-radius:16px;padding:14px;color:#fff;margin-top:12px}
-.barcode{color:#ff4d9d;font-weight:900;direction:ltr;text-align:right;font-size:18px}
-.store{display:flex;justify-content:space-between;background:#1e293b;padding:11px;border-radius:10px;margin:6px 0;text-decoration:none;color:#fff}
-.store b{color:#22c55e}
-#reader{display:none;border-radius:12px;overflow:hidden;margin:8px 0}
-.prod{width:90px;height:130px;object-fit:cover;border-radius:12px;background:#fff}
-.top{background:#dcfce7;color:#16a34a;text-align:center;padding:8px;border-radius:10px;font-size:13px}
-.row{display:flex;gap:8px;margin-top:8px}
+body{background:#020617;color:#fff;font-family:system-ui;padding:12px;margin:0}
+h2{margin:10px 0}.card{background:#1e293b;border-radius:18px;padding:14px;margin:12px 0;border:1px solid #334155}
+.kcal{font-size:32px;font-weight:900}.ok{color:#22c55e}.mid{color:#facc15}.bad{color:#ef4444}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
+.box{background:#0f172a;padding:10px;border-radius:12px;text-align:center;font-size:13px}
+.box b{display:block;font-size:18px;margin-top:4px}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;margin:3px}
+input{width:100%;padding:16px;border-radius:14px;border:none;font-size:18px;box-sizing:border-box}
+.flag{font-size:20px}
 </style></head><body>
-<div class="card">
-<div class="top">🟢 متصل – تم إصلاح مشكلة 404 – نفس الصورة لكل المنتجات ✅</div>
-<h1 style="text-align:center;margin:10px 0">قبل ما تشتري... اسال.</h1>
-<p style="text-align:center;color:#64748b;font-size:14px">صوّر المنتج أو ابحث عنه، وسنرتّب لك أهم المعلومات قبل الدفع.</p>
-
-<button class="btn" onclick="alert('ارفع صورة المنتج - قريبا')">📷 البحث بالصورة</button>
-<button class="btn" onclick="startScan()">▢ مسح باركود</button>
-<button class="btn" onclick="show()">📍 أسعار ومتاجر قريبة</button>
-<div id="reader"></div>
-<div class="row">
-<input id="q" value="6223001360056" placeholder="اسم المنتج أو الموديل - Aquafina / Infinix">
-<button class="btn2" onclick="show()">بحث</button>
-</div>
-<div id="out"></div>
-<div id="loc" style="font-size:12px;color:#16a34a;text-align:center;margin-top:8px"></div>
-<div style="font-size:11px;color:#94a3b8;text-align:center;margin-top:10px">المعلومات الموثقة تظهر مع المصدر ووقت التحقق. الصورة وحدها ليست إثباتا للأصالة.</div>
-</div>
-
+<h2>🌍 اسأل قبل ما تشتري - عالمي شامل</h2>
+<p style="opacity:.7">اكتب أي باركود من أي دولة - 622 مصر وكل العالم</p>
+<input id="bc" placeholder="مثال: 6223001360056 أو 5000157027893" autofocus>
+<div id="res"></div>
 <script>
-let qr;
-const DB={
-"6223001360056":{name:"Aquafina Natural Water",ar:"مياه أكوافينا الطبيعية",brand:"Aquafina",img:"https://images.openfoodfacts.org/images/products/622/300/136/0056/front_en.3.400.jpg",prices:[{s:"كارفور كفرة نصار (1.1 كم)",p:"7.5ج"},{s:"أمازون مصر",p:"7ج"},{s:"جوميا مصر",p:"7.5ج"},{s:"سبينس الجيزة",p:"8ج"}]},
-"6224009210824":{name:"جبنة رومي",ar:"جبنة رومي مصرية",brand:"مصري 622",img:"",prices:[{s:"كارفور",p:"18.5ج",d:"1.2 كم"},{s:"أمازون مصر",p:"22ج"},{s:"جوميا",p:"19ج"}]},
-"4890000000000":{name:"Infinix Hot 40",ar:"موبايل انفينكس",brand:"Infinix",img:"",prices:[{s:"أمازون مصر",p:"6,499ج"},{s:"نون مصر",p:"6,400ج"},{s:"دريم 2000",p:"6,300ج"},{s:"بي.تك",p:"6,599ج"}]}
-};
-
-function show(){
-let code=document.getElementById('q').value.trim();
-if(!code) code="6223001360056";
-let p=DB[code];
-if(!p){
-  if(code.startsWith("489")||/infinix/i.test(code)) p=DB["4890000000000"];
-  else if(code.startsWith("622")) p={name:"منتج مصري "+code,ar:"منتج مصري 622",brand:"مصري 622",img:"",prices:[{s:"كارفور كفرة نصار",p:"18.5ج",d:"1.1 كم"},{s:"أمازون مصر",p:"22ج"},{s:"جوميا",p:"19ج"}]};
-  else p={name:code,ar:"منتج عام",brand:"غير متوفر",img:"",prices:[{s:"كارفور",p:"سعر حسب المتجر",d:"قريب"},{s:"أمازون مصر",p:"ابحث"},{s:"جوميا",p:"ابحث"}]};
+const COUNTRY={622:'🇪🇬 مصر',729:'🇮🇱',500:'🇬🇧 بريطانيا',544:'🇧🇪',400:'🇩🇪 ألمانيا',890:'🇮🇳 الهند',690:'🇨🇳 الصين',885:'🇹🇭 تايلاند',880:'🇰🇷 كوريا',490:'🇯🇵 اليابان',544:'🇧🇪',300:'🇫🇷 فرنسا',800:'🇮🇹 ايطاليا',840:'🇪🇸 اسبانيا',871:'🇳🇱 هولندا',900:'🇦🇹 النمسا',489:'🇭🇰 هونج كونج - انفينكس',000:'🌐 عالمي'};
+function countryFrom(code){let p=code.substring(0,3); return COUNTRY[p]||COUNTRY[p[0]+'00']||'🌍 منتج عالمي'}
+function evalFood(kcal,fat,sugar,salt){
+ let t=[];
+ if(kcal==0) t.push('<span class=badge style=background:#14532d>💧 0 سعرات - ممتاز للريجيم</span>');
+ else if(kcal<80) t.push('<span class=badge style=background:#14532d>✅ قليل السعرات - ينفع للدايت</span>');
+ else if(kcal>250) t.push('<span class=badge style=background:#7f1d1d>❌ عالي السعرات جدا</span>');
+ if(sugar>15) t.push('<span class=badge style=background:#7f1d1d>⚠️ سكريات عالية - لا ينفع لمرضى السكر</span>');
+ else if(sugar<5) t.push('<span class=badge style=background:#14532d>✅ قليل السكر</span>');
+ if(fat>15) t.push('<span class=badge style=background:#7f1d1d>🧈 دهون عالية - غازات وانتفاخ</span>');
+ if(salt>1.5) t.push('<span class=badge style=background:#7f1d1d>🧂 ملح عالي - لا ينفع للضغط</span>');
+ return t.join(' ');
 }
-let html=`<div class="dark">
-<div style="display:flex;gap:12px;align-items:center">
-${p.img?`<img src="${p.img}" class="prod">`:`<div class="prod" style="display:flex;align-items:center;justify-content:center;color:#0f172a;font-weight:900">IMG</div>`}
-<div>
-<div class="barcode">${code}</div>
-<div style="font-size:20px;font-weight:900">${p.name}</div>
-<div style="font-size:12px;color:#94a3b8">العلامة: ${p.brand} | الباركود: ${code}</div>
-<div style="color:#4ade80;font-size:12px">🌐 نتيجة موثقة - ${new Date().toLocaleString('ar-EG')} - نفس الصورة لكل المنتجات</div>
-</div>
-</div>
-<hr style="border-color:#1e293b">
-<div style="color:#94a3b8;font-size:13px;margin-bottom:6px">الأسعار - ${p.ar}</div>`;
-p.prices.forEach(pr=>{
-html+=`<a class="store" href="https://www.google.com/search?q=${encodeURIComponent(p.name+' سعر مصر')}" target="_blank"><span>${pr.s} ${pr.d?`(${pr.d})`:``}</span><b>${pr.p} ↗</b></a>`;
-});
-html+=`</div>`;
-document.getElementById('out').innerHTML=html;
+async function get(code){
+ code=code.replace(/\D/g,''); if(code.length<8) return;
+ document.getElementById('res').innerHTML='⏳ جاري البحث في قاعدة بيانات العالم...';
+ try{
+  let r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+  let j=await r.json();
+  if(j.status==0){
+   document.getElementById('res').innerHTML=`<div class=card>🔍 الباركود <b>${code}</b> ${countryFrom(code)}<br>مش متسجل في قاعدة الأكل العالمية - جرب باركود أكل أو مشروب. لو جهاز زي Infinix اكتب 489...</div>`; return;
+  }
+  let p=j.product; let n=p.nutriments||{};
+  let kcal=n['energy-kcal_100g']||n['energy-kcal']||0;
+  let fat=n.fat_100g||0; let sugar=n.sugars_100g||0; let salt=n.salt_100g||0; let prot=n.proteins_100g||0; let sat=n['saturated-fat_100g']||0;
+  let name=p.product_name_ar||p.product_name||'منتج غذائي';
+  let img=p.image_front_url||p.image_url||'';
+  document.getElementById('res').innerHTML=`
+   <div class=card>
+    <div style=display:flex;gap:12px><img src="${img}" style="width:90px;height:90px;object-fit:cover;border-radius:14px;background:#000"><div><h3 style=margin:0>${name}</h3><div class=flag>${countryFrom(code)} - ${p.brands||''}</div><div style=opacity:.6;font-size:12px>باركود: ${code}</div></div></div>
+    <div class="kcal ${kcal==0?'ok':kcal>200?'bad':'mid'}">${kcal} سعرة حرارية / 100g</div>
+    ${evalFood(kcal,fat,sugar,salt)}
+    <div class=grid>
+     <div class=box>🧈 دهون<b>${fat}g</b></div>
+     <div class=box>🍬 سكر<b>${sugar}g</b></div>
+     <div class=box>🧂 ملح<b>${salt}g</b></div>
+     <div class=box>💪 بروتين<b>${prot}g</b></div>
+     <div class=box>💔 مشبعة<b>${sat}g</b></div>
+     <div class=box>💧 سوائل<b>${n.water_100g||'-'}%</b></div>
+    </div>
+    <div style="background:#020617;padding:10px;border-radius:10px;margin-top:8px">
+     <b>💡 الفائدة:</b><br>
+     ${kcal==0?'مياه ترطيب ممتازة، تنفع للصيام والدايت والرياضة، بتساعد الكلى وتنقية الجسم':kcal<100?'خفيف على المعدة، ينفع سناك للدايت، سعرات قليلة':'سعرات عالية تعطي طاقة سريعة لكن كثرة استهلاكه يسبب زيادة وزن وغازات'}
+    </div>
+    <div style="background:#1e3a8a;padding:8px;border-radius:10px;margin-top:8px;font-size:12px">📋 المكونات: ${p.ingredients_text_ar||p.ingredients_text||'غير مسجلة'}<br>⚠️ حساسية: ${p.allergens||'لا يوجد'}</div>
+   </div>`;
+ }catch(e){ document.getElementById('res').innerHTML='❌ انترنت ضعيف - جرب تاني'; }
 }
-
-function startScan(){
-let r=document.getElementById('reader');
-r.style.display='block';
-if(!qr) qr=new Html5Qrcode("reader");
-qr.start({facingMode:"environment"},{fps:10,qrbox:260},d=>{document.getElementById('q').value=d;qr.stop();r.style.display='none';show();},()=>{});
-}
-if(navigator.geolocation){
-navigator.geolocation.getCurrentPosition(pos=>{
-document.getElementById('loc').innerText=`📍 ${pos.coords.latitude.toFixed(4)},${pos.coords.longitude.toFixed(4)} - كفرة نصار، الجيزة - تم التحقق الآن`;
-});
-}
-show();
+document.getElementById('bc').addEventListener('input',e=>get(e.target.value));
+get('6223001360056');
 </script></body></html>
