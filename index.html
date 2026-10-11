@@ -1,41 +1,51 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>اسأل قبل ما تشتري - عالمي</title>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>اسأل قبل ما تشتري - عالمي شامل</title>
 <style>
 body{background:#020617;color:#fff;font-family:system-ui;padding:12px;margin:0}
-h2{margin:10px 0}.card{background:#1e293b;border-radius:18px;padding:14px;margin:12px 0;border:1px solid #334155}
+.card{background:#1e293b;border-radius:18px;padding:14px;margin:12px 0;border:1px solid #334155}
 .kcal{font-size:32px;font-weight:900}.ok{color:#22c55e}.mid{color:#facc15}.bad{color:#ef4444}
 .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
 .box{background:#0f172a;padding:10px;border-radius:12px;text-align:center;font-size:13px}
 .box b{display:block;font-size:18px;margin-top:4px}
 .badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;margin:3px}
-input{width:100%;padding:16px;border-radius:14px;border:none;font-size:18px;box-sizing:border-box}
+input,button{width:100%;padding:16px;border-radius:14px;border:none;font-size:18px;box-sizing:border-box;margin:6px 0}
+button{background:#22c55e;color:#000;font-weight:800;cursor:pointer}
+#cam{width:100%;border-radius:14px;display:none;background:#000}
 .flag{font-size:20px}
 </style></head><body>
 <h2>🌍 اسأل قبل ما تشتري - عالمي شامل</h2>
-<p style="opacity:.7">اكتب أي باركود من أي دولة - 622 مصر وكل العالم</p>
-<input id="bc" placeholder="مثال: 6223001360056 أو 5000157027893" autofocus>
+<p style="opacity:.7">📸 صور الباركود أو اكتب أي باركود من أي دولة - 622 مصر وكل العالم</p>
+
+<button onclick="startCam()">📷 افتح الكاميرا وامسح الباركود</button>
+<video id="cam" autoplay playsinline></video>
+<canvas id="cvs" style="display:none"></canvas>
+
+<input id="bc" placeholder="أو اكتب الباركود: 6223001360056 أو 5000157027893">
 <div id="res"></div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
-const COUNTRY={622:'🇪🇬 مصر',729:'🇮🇱',500:'🇬🇧 بريطانيا',544:'🇧🇪',400:'🇩🇪 ألمانيا',890:'🇮🇳 الهند',690:'🇨🇳 الصين',885:'🇹🇭 تايلاند',880:'🇰🇷 كوريا',490:'🇯🇵 اليابان',544:'🇧🇪',300:'🇫🇷 فرنسا',800:'🇮🇹 ايطاليا',840:'🇪🇸 اسبانيا',871:'🇳🇱 هولندا',900:'🇦🇹 النمسا',489:'🇭🇰 هونج كونج - انفينكس',000:'🌐 عالمي'};
+const COUNTRY={622:'🇪🇬 مصر',729:'🇮🇱 اسرائيل',500:'🇬🇧 بريطانيا',544:'🇧🇪 بلجيكا',400:'🇩🇪 ألمانيا',890:'🇮🇳 الهند',690:'🇨🇳 الصين',691:'🇨🇳 الصين',692:'🇨🇳 الصين',885:'🇹🇭 تايلاند',880:'🇰🇷 كوريا',490:'🇯🇵 اليابان',300:'🇫🇷 فرنسا',800:'🇮🇹 ايطاليا',840:'🇪🇸 اسبانيا',871:'🇳🇱 هولندا',900:'🇦🇹 النمسا',489:'🇭🇰 هونج كونج',000:'🌐 عالمي'};
 function countryFrom(code){let p=code.substring(0,3); return COUNTRY[p]||COUNTRY[p[0]+'00']||'🌍 منتج عالمي'}
 function evalFood(kcal,fat,sugar,salt){
  let t=[];
- if(kcal==0) t.push('<span class=badge style=background:#14532d>💧 0 سعرات - ممتاز للريجيم</span>');
+ if(kcal==0) t.push('<span class=badge style=background:#14532d>💧 0 سعرات - ممتاز للدايت</span>');
  else if(kcal<80) t.push('<span class=badge style=background:#14532d>✅ قليل السعرات - ينفع للدايت</span>');
  else if(kcal>250) t.push('<span class=badge style=background:#7f1d1d>❌ عالي السعرات جدا</span>');
- if(sugar>15) t.push('<span class=badge style=background:#7f1d1d>⚠️ سكريات عالية - لا ينفع لمرضى السكر</span>');
+ if(sugar>15) t.push('<span class=badge style=background:#7f1d1d>⚠️ سكريات عالية - خطر للسكر</span>');
  else if(sugar<5) t.push('<span class=badge style=background:#14532d>✅ قليل السكر</span>');
- if(fat>15) t.push('<span class=badge style=background:#7f1d1d>🧈 دهون عالية - غازات وانتفاخ</span>');
- if(salt>1.5) t.push('<span class=badge style=background:#7f1d1d>🧂 ملح عالي - لا ينفع للضغط</span>');
+ if(fat>15) t.push('<span class=badge style=background:#7f1d1d>🧈 دهون عالية - غازات</span>');
+ if(salt>1.5) t.push('<span class=badge style=background:#7f1d1d>🧂 ملح عالي - لا ينفع للضغط العالي</span>');
  return t.join(' ');
 }
 async function get(code){
- code=code.replace(/\D/g,''); if(code.length<8) return;
- document.getElementById('res').innerHTML='⏳ جاري البحث في قاعدة بيانات العالم...';
+ code=String(code).replace(/\D/g,''); if(code.length<8) return;
+ document.getElementById('bc').value=code;
+ document.getElementById('res').innerHTML='⏳ جاري البحث في قاعدة بيانات العالم '+countryFrom(code)+'...';
  try{
   let r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
   let j=await r.json();
   if(j.status==0){
-   document.getElementById('res').innerHTML=`<div class=card>🔍 الباركود <b>${code}</b> ${countryFrom(code)}<br>مش متسجل في قاعدة الأكل العالمية - جرب باركود أكل أو مشروب. لو جهاز زي Infinix اكتب 489...</div>`; return;
+   document.getElementById('res').innerHTML=`<div class=card>🔍 الباركود <b>${code}</b> ${countryFrom(code)}<br>مش متسجل في قاعدة الأكل العالمية - بس ده <b>${countryFrom(code)}</b><br><br>جرب: 6223001360056 (مصر) أو 5449000000996 (كوكاكولا)</div>`; return;
   }
   let p=j.product; let n=p.nutriments||{};
   let kcal=n['energy-kcal_100g']||n['energy-kcal']||0;
@@ -53,15 +63,21 @@ async function get(code){
      <div class=box>🧂 ملح<b>${salt}g</b></div>
      <div class=box>💪 بروتين<b>${prot}g</b></div>
      <div class=box>💔 مشبعة<b>${sat}g</b></div>
-     <div class=box>💧 سوائل<b>${n.water_100g||'-'}%</b></div>
+     <div class=box>💧 ماء<b>${n.water_100g||'-'}%</b></div>
     </div>
     <div style="background:#020617;padding:10px;border-radius:10px;margin-top:8px">
-     <b>💡 الفائدة:</b><br>
-     ${kcal==0?'مياه ترطيب ممتازة، تنفع للصيام والدايت والرياضة، بتساعد الكلى وتنقية الجسم':kcal<100?'خفيف على المعدة، ينفع سناك للدايت، سعرات قليلة':'سعرات عالية تعطي طاقة سريعة لكن كثرة استهلاكه يسبب زيادة وزن وغازات'}
+     <b>💡 الفائدة / الضرر:</b><br>
+     ${kcal==0?'💧 ترطيب ممتاز - 0 سعرات - مناسب للدايت والرياضة والصيام، يساعد الكلى وتنقية الجسم':kcal<100?'✅ خفيف على المعدة، ينفع سناك للدايت، سعرات قليلة':'⚠️ سعرات عالية تعطي طاقة سريعة لكن كثرة استهلاكه تسبب زيادة وزن وغازات وانتفاخ'}
     </div>
-    <div style="background:#1e3a8a;padding:8px;border-radius:10px;margin-top:8px;font-size:12px">📋 المكونات: ${p.ingredients_text_ar||p.ingredients_text||'غير مسجلة'}<br>⚠️ حساسية: ${p.allergens||'لا يوجد'}</div>
+    <div style="background:#1e3a8a;padding:8px;border-radius:10px;margin-top:8px;font-size:12px">📋 المكونات: ${p.ingredients_text_ar||p.ingredients_text||'غير مسجلة'}</div>
    </div>`;
  }catch(e){ document.getElementById('res').innerHTML='❌ انترنت ضعيف - جرب تاني'; }
+}
+let qr;
+function startCam(){
+ document.getElementById('cam').style.display='block';
+ if(!qr) qr=new Html5Qrcode("cam");
+ qr.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{get(txt); qr.stop(); document.getElementById('cam').style.display='none';}).catch(()=>{document.getElementById('res').innerHTML='❌ الكاميرا محتاجة https - افتح من ask-before-buy.pages.dev مش من github';});
 }
 document.getElementById('bc').addEventListener('input',e=>get(e.target.value));
 get('6223001360056');
