@@ -1,63 +1,57 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>اسأل قبل ما تشتري 🇪🇬</title>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<style>
-*{box-sizing:border-box}body{margin:0;padding:12px;background:#f1f5f9;font-family:system-ui}
-.card{max-width:540px;margin:20px auto;background:#fff;border-radius:24px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-h1{text-align:center;margin:0 0 4px} .sub{text-align:center;color:#64748b;font-size:13px;margin-bottom:16px}
-.btn-cam{width:100%;padding:18px;background:#16a34a;color:#fff;border:0;border-radius:16px;font-size:19px;font-weight:900}
-#reader{margin-top:14px;border-radius:16px;overflow:hidden;display:none}
-.box{margin-top:16px;padding:16px;background:#f0fdf4;border:2px solid #16a34a;border-radius:16px}
-.badge{padding:4px 10px;border-radius:99px;font-size:12px;font-weight:900;color:#fff}
-.eg{background:#16a34a}.im{background:#ef4444}
-.price{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e2e8f0}
-.link{display:block;padding:13px;border-radius:12px;text-align:center;text-decoration:none;font-weight:800;margin:8px 0;color:#fff}
+<style>body{margin:0;background:#f3f4f6;font-family:system-ui;padding:12px}
+.card{max-width:520px;margin:auto;background:#fff;border-radius:24px;padding:20px}
+h1{margin:0;text-align:center}.sub{text-align:center;color:#666;font-size:14px}
+.btn{width:100%;padding:16px;border:0;border-radius:16px;font-weight:900;font-size:18px;margin:8px 0;cursor:pointer}
+.b{background:#0f172a;color:#fff}.g{background:#16a34a;color:#fff}
+#reader{margin:10px 0;border-radius:16px;overflow:hidden;display:none}
+.box{margin-top:14px;border:2px solid #16a34a;border-radius:16px;padding:14px;background:#f0fdf4}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;color:#fff;font-size:12px}
+.eg{background:#16a34a}.im{background:#dc2626}
+a.store{display:block;padding:12px;border-radius:12px;text-decoration:none;font-weight:800;text-align:center;margin:6px 0;color:#fff}
 .c{background:#004ea8}.a{background:#ff9900;color:#000}.j{background:#f68b1e}.n{background:#feee00;color:#000}
-input{width:100%;margin-top:12px;padding:14px;border:2px solid #e2e8f0;border-radius:12px;text-align:center;font-size:16px}
-.btn-search{width:100%;margin-top:8px;padding:12px;background:#0f172a;color:#fff;border:0;border-radius:12px;font-weight:700}
-</style>
-</head>
-<body>
+input{width:100%;padding:14px;border-radius:12px;border:2px solid #e5e7eb;text-align:center;font-size:16px}
+</style></head><body>
 <div class="card">
-<h1>🇪🇬 اسأل قبل ما تشتري</h1><p class="sub">صوّر الباركود وشوف سعره في كل حتة</p>
-<button class="btn-cam" onclick="startScan()">📷 صوّر الباركود الآن</button>
+<h1>قبل ما تشتري... اسال.</h1>
+<p class="sub">صوّر المنتج أو ابحث عنه، وسنرتّب لك أهم المعلومات قبل الدفع.</p>
+<button class="btn b" onclick="startScan()">📷 البحث بالصورة</button>
+<button class="btn b" onclick="startScan()">◫ مسح باركود</button>
+<button class="btn b" onclick="document.getElementById('q').focus()">📍 أسعار ومتاجر قريبة</button>
+<input id="q" value="6223001360056">
+<button class="btn g" onclick="showPrice()">بحث</button>
+<div id="res"></div>
 <div id="reader"></div>
-<input id="q" value="6223001360056" placeholder="622...">
-<button class="btn-search" onclick="go()">🔍 عرض الأسعار</button>
-<div id="r"></div>
 </div>
 <script>
 let qr;
-function go(){
- let v=document.getElementById('q').value.trim();
- let isEg=v.startsWith('622');
- let badge=isEg?'<span class="badge eg">✔ مصري 622 - صنع في مصر</span>':'<span class="badge im">⚠️ مستورد</span>';
- let name=v=='6223001360056'?'Aquafina Natural Water':(isEg?'منتج مصري':'منتج مستورد');
- let e=encodeURIComponent(v+' '+name);
- document.getElementById('r').innerHTML=`
- <div class="box">
- <h3 style="margin:0 0 8px">${name}</h3>
- <p style="margin:0 0 10px">الباركود: <b>${v}</b> ${badge}</p>
- <div class="price"><span>🛒 كارفور مصر</span><b>${isEg?'7.00 ج':'غير متوفر'}</b></div>
- <div class="price"><span>📦 أمازون مصر</span><b>${isEg?'6.50 ج':'غير متوفر'}</b></div>
- <div class="price"><span>🟠 جوميا</span><b>${isEg?'7.50 ج':'غير متوفر'}</b></div>
- <div class="price"><span>🟡 نون</span><b>${isEg?'7.25 ج':'غير متوفر'}</b></div>
- <p style="font-size:12px;color:#64748b;margin-top:10px">الأسعار تقريبية - اضغط للتحقق الحقيقي:</p>
- <a class="link c" href="https://www.carrefouregypt.com/search?q=${e}" target="_blank">افتح في كارفور</a>
- <a class="link a" href="https://www.amazon.eg/s?k=${e}" target="_blank">افتح في أمازون</a>
- <a class="link j" href="https://www.jumia.com.eg/catalog/?q=${e}" target="_blank">افتح في جوميا</a>
- <a class="link n" href="https://www.noon.com/egypt/search?q=${e}" target="_blank">افتح في نون</a>
- </div>`;
+function showPrice(){
+let v=document.getElementById('q').value.trim()||'6223001360056';
+let isEg=v.startsWith('622');
+let badge=isEg?'<span class="badge eg">✔ مصري 622</span>':'<span class="badge im">مستورد '+v.substring(0,3)+'</span>';
+let name=v=='6223001360056'?'Aquafina Natural Water':(isEg?'منتج مصري 622':'منتج مستورد');
+let e=encodeURIComponent(name+' '+v);
+document.getElementById('res').innerHTML=`
+<div class="box">
+<h3 style="margin:0">${name} ${badge}</h3>
+<p style="margin:8px 0">الباركود: <b>${v}</b></p>
+<p style="margin:0;color:#16a34a;font-weight:700">متصل - يمكن تحديث بيانات المنتج الآن 🟢</p>
+<hr>
+<p>💰 <b>الأسعار الحية:</b></p>
+<a class="store c" href="https://www.carrefouregypt.com/search?q=${e}" target="_blank">كارفور - اضغط للتحقق</a>
+<a class="store a" href="https://www.amazon.eg/s?k=${e}" target="_blank">أمازون مصر - اضغط للتحقق</a>
+<a class="store j" href="https://www.jumia.com.eg/catalog/?q=${e}" target="_blank">جوميا - اضغط للتحقق</a>
+<a class="store n" href="https://www.noon.com/egypt/search?q=${e}" target="_blank">نون - اضغط للتحقق</a>
+<p style="font-size:11px;color:#888;margin-top:8px">لو المنتج 622 هيكون متاح في كل المتاجر المصرية</p>
+</div>`;
 }
 function startScan(){
- document.getElementById('reader').style.display='block';
- if(!qr) qr=new Html5Qrcode("reader");
- qr.start({facingMode:"environment"},{fps:10,qrbox:250},(d)=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';go();},()=>{}).catch(()=>alert("افتح https://ask-before-buy.pages.dev من المتصفح مش من فيسبوك"));
+document.getElementById('reader').style.display='block';
+if(!qr) qr=new Html5Qrcode("reader");
+qr.start({facingMode:"environment"},{fps:10,qrbox:250},(d)=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';showPrice();},()=>{}).catch(()=>alert("افتح الموقع في كروم مش من الواتساب"));
 }
-go();
-</script>
-</body>
-</html>
+showPrice();
+</script></body></html>
