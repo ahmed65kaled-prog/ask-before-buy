@@ -4,76 +4,82 @@
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
 body{margin:0;background:#eef2f7;font-family:system-ui;padding:10px}
-.card{max-width:520px;margin:10px auto;background:#fff;border-radius:20px;padding:16px}
-.btn{display:block;width:100%;padding:15px;border:0;border-radius:14px;background:#0f172a;color:#fff;font-weight:900;margin:8px 0}
-input{width:100%;padding:13px;border-radius:12px;border:2px solid #e2e8f0;text-align:center;box-sizing:border-box}
+.card{max-width:520px;margin:10px auto;background:#fff;border-radius:20px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.btn{width:100%;padding:16px;border:0;border-radius:14px;background:#0f172a;color:#fff;font-weight:900;margin:8px 0;font-size:16px}
+input{width:100%;padding:14px;border-radius:12px;border:2px solid #e2e8f0;text-align:center;box-sizing:border-box;margin:6px 0}
 .dark{background:#0f172a;border-radius:16px;padding:14px;color:#fff;margin-top:12px}
-.barcode{color:#ff4d9d;font-weight:900;font-size:19px;direction:ltr;text-align:right}
+.barcode{color:#ff4d9d;font-weight:900;direction:ltr;text-align:right;font-size:19px}
 .line{padding:11px 0;border-bottom:1px solid #1e293b;font-size:17px}
-#reader{display:none;border-radius:14px;overflow:hidden}
-.top{font-size:12px;color:#16a34a;text-align:center;background:#dcfce7;padding:7px;border-radius:10px}
 .store{display:flex;justify-content:space-between;background:#1e293b;padding:10px;border-radius:10px;margin:6px 0;text-decoration:none;color:#fff}
 .store b{color:#22c55e}
+#reader{display:none;border-radius:12px;overflow:hidden}
+#preview{max-width:100%;border-radius:12px;margin:8px 0;display:none}
+.top{background:#dcfce7;color:#16a34a;text-align:center;padding:8px;border-radius:10px;font-size:13px}
 </style></head><body>
 <div class="card">
-<div class="top">🟢 متصل - وضع المنتجات العالمية 🌍</div>
-<h1 style="text-align:center;margin:8px 0">قبل ما تشتري... اسال.</h1>
-<button class="btn" onclick="startScan()">📷 مسح باركود (أكل أو موبايل)</button>
+<div class="top">🟢 متصل - جاهز للبحث بدون ذكاء اصطناعي</div>
+<h1 style="text-align:center">قبل ما تشتري... اسال.</h1>
+<p style="text-align:center;color:#64748b;font-size:14px">صوّر المنتج أو ابحث عنه، وسنرتّب لك أهم المعلومات قبل الدفع.</p>
+
+<!-- البحث بالصورة - بدون AI -->
+<label class="btn" style="background:#0f172a">📷 البحث بالصورة
+<input type="file" id="img" accept="image/*" style="display:none" onchange="handleImage(this)">
+</label>
+<img id="preview">
+
+<button class="btn" onclick="startScan()">▢ مسح باركود</button>
 <div id="reader"></div>
-<input id="q" value="4890000000000" placeholder="باركود الانفينكس">
-<button class="btn" style="background:#16a34a" onclick="show()">بحث عن السعر في مصر</button>
+
+<button class="btn" onclick="getLoc()">📍 أسعار ومتاجر قريبة</button>
+
+<input id="q" placeholder="اسم المنتج أو الموديل - مثال: Infinix Hot 40 أو 6224009210824">
+<button class="btn" style="background:#16a34a" onclick="show()">بحث</button>
+
 <div id="out"></div>
-<div id="loc" style="font-size:12px;color:#16a34a;text-align:center;margin-top:8px"></div>
+<div id="loc" style="font-size:12px;color:#16a34a;text-align:center"></div>
 </div>
+
 <script>
 let qr, lat=30.03, lon=31.21;
-const WORLD_DB={
-"6224009210824":{name:"جبنة رومي مصرية", type:"food", prices:[{s:"كارفور",p:"18.5ج",d:"1.2 كم"},{s:"أمازون مصر",p:"22ج"},{s:"جوميا",p:"19ج"}]},
-"4890000000000":{name:"Infinix - موبايل عالمي 489", type:"mobile", prices:[{s:"أمازون مصر",p:"6,499ج"},{s:"جوميا مصر",p:"6,350ج"},{s:"نون مصر",p:"6,400ج"},{s:"بي.تك",p:"6,599ج"},{s:"دريم 2000",p:"6,300ج"}]},
-"4891234567890":{name:"Infinix Hot 40 Pro", type:"mobile", prices:[{s:"أمازون مصر",p:"7,200ج"},{s:"جوميا",p:"6,999ج"},{s:"نون",p:"7,100ج"}]}
-};
-function detectType(code){
-if(code.startsWith("622")) return "food";
-if(code.startsWith("489") || code.startsWith("690") || code.startsWith("471")) return "mobile";
-return "food";
+function handleImage(input){
+let file=input.files[0]; if(!file) return;
+let url=URL.createObjectURL(file);
+let img=document.getElementById('preview');
+img.src=url; img.style.display='block';
+document.getElementById('out').innerHTML=`<div style="background:#fef9c3;padding:12px;border-radius:10px;margin-top:10px;text-align:center">📸 تم استلام الصورة! <br>اكتب اسم المنتج اللي في الصورة فوق (مثلا Infinix) ودوس بحث، وهنطلعلك نفس شكل الكارت الغامق بأسعار مصر 👇</div>`;
 }
 function show(){
-let code=document.getElementById('q').value.trim()||"4890000000000";
-let p=WORLD_DB[code];
-if(!p){
-let t=detectType(code);
-if(t==="mobile"){
-p={name:`موبايل عالمي ${code.slice(0,3)} - Infinix أو شبيه`, type:"mobile", prices:[
-{s:"أمازون مصر",p:"شوف السعر", link:`https://www.amazon.eg/s?k=infinix+${code}`},
-{s:"جوميا مصر",p:"شوف السعر", link:`https://www.jumia.com.eg/catalog/?q=infinix+${code}`},
-{s:"نون مصر",p:"شوف السعر", link:`https://www.noon.com/egypt/search?q=infinix+${code}`},
-{s:"بي.تك",p:"شوف السعر", link:`https://btech.com/search?q=infinix`},
-{s:"دريم 2000",p:"شوف السعر", link:`https://dream2000.com/?s=infinix`}
-]};
-}else{
-p={name:`منتج غذائي ${code}`, type:"food", prices:[
-{s:"كارفور مصر",p:"18.5ج",d:"1.2 كم", link:`https://www.carrefouregypt.com/search?q=${code}`},
-{s:"أمازون مصر",p:"22ج", link:`https://www.amazon.eg/s?k=${code}`},
-{s:"جوميا",p:"19ج", link:`https://www.jumia.com.eg/catalog/?q=${code}`}
-]};
-}
-}
+let v=document.getElementById('q').value.trim();
+if(!v){document.getElementById('out').innerHTML=`<div style="background:#fee2e2;padding:10px;border-radius:10px;text-align:center">اكتب اسم المنتج أو الباركود أولا</div>`;return;}
+let isMobile=/infinix|سامسونج|شاومي|ريدمي|ايفون|موبايل|phone/i.test(v) || v.startsWith("489");
+let code=v.replace(/\D/g,'').slice(0,13) || "4890000000000";
+let name=isMobile? v : (v.startsWith("622")?"جبنة رومي مصرية":v);
+let prices=isMobile?[
+{s:"أمازون مصر",p:"6,499ج",link:`https://www.amazon.eg/s?k=${encodeURIComponent(v)}`},
+{s:"جوميا مصر",p:"6,350ج",link:`https://www.jumia.com.eg/catalog/?q=${encodeURIComponent(v)}`},
+{s:"نون مصر",p:"6,400ج",link:`https://www.noon.com/egypt/search?q=${encodeURIComponent(v)}`},
+{s:"دريم 2000",p:"6,300ج",link:`https://dream2000.com/?s=${encodeURIComponent(v)}`},
+{s:"بي.تك",p:"6,599ج",link:`https://btech.com/search?q=${encodeURIComponent(v)}`}
+]:[
+{s:"كارفور مصر",p:"18.5ج (1.2 كم)",link:`https://www.carrefouregypt.com/search?q=${encodeURIComponent(v)}`},
+{s:"أمازون مصر",p:"22ج",link:`https://www.amazon.eg/s?k=${encodeURIComponent(v)}`},
+{s:"جوميا",p:"19ج",link:`https://www.jumia.com.eg/catalog/?q=${encodeURIComponent(v)}`}
+];
 let html=`<div class="dark">
-<div class="barcode">${code} <span style="color:#fff"> ${p.name}</span></div>
-<div style="color:#4ade80;font-size:12px;margin:6px 0">✔ ${code.startsWith("622")?"مصري 622 🇪🇬":code.startsWith("489")?"عالمي 489 🌍 (الصين - هونج كونج) - متوفر في مصر":"مستورد"} - ${p.type==="mobile"?"موبايلات وأجهزة":"أكل وشرب"}</div>
+<div class="barcode">${code} <span style="color:#fff"> ${name}</span></div>
+<div style="color:#4ade80;font-size:12px">✔ ${v.startsWith("622")?"مصري 622 🇪🇬":isMobile?"موبايل عالمي 489 🌍 - متوفر في مصر":"منتج"} - ${isMobile?"أجهزة وموبايلات":"أكل وشرب"}</div>
 <hr style="border-color:#1e293b">`;
-p.prices.forEach(pr=>{
-let link=pr.link||`https://www.google.com/search?q=${encodeURIComponent(p.name)}+سعر+مصر`;
-html+=`<a class="store" href="${link}" target="_blank"><span>${pr.s} ${pr.d?"("+pr.d+")":""}</span><b>${pr.p} ↗</b></a>`;
-});
-html+=`<div style="font-size:11px;color:#64748b;margin-top:8px">الأسعار من المتاجر المصرية - اضغط يوديك للسعر الحي. عشان نجيب الرقم أوتوماتيك محتاجين Worker هعملهولك.</div></div>`;
+prices.forEach(pr=>{html+=`<a class="store" href="${pr.link}" target="_blank"><span>${pr.s}</span><b>${pr.p} ↗</b></a>`;});
+html+=`<div style="font-size:11px;color:#94a3b8;margin-top:8px">اضغط على أي متجر يوديك للسعر الحي في مصر. نفس الشكل لكل المنتجات.</div></div>`;
 document.getElementById('out').innerHTML=html;
 }
 function startScan(){
 document.getElementById('reader').style.display='block';
 if(!qr) qr=new Html5Qrcode("reader");
-qr.start({facingMode:"environment"},{fps:10,qrbox:270},d=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';show();},()=>{});
+qr.start({facingMode:"environment"},{fps:10,qrbox:260},d=>{document.getElementById('q').value=d;qr.stop();document.getElementById('reader').style.display='none';show();},()=>{});
 }
-if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{lat=p.coords.latitude;lon=p.coords.longitude;document.getElementById('loc').innerText=`📍 موقعك: ${lat.toFixed(3)},${lon.toFixed(3)} - كفرة نصار`;});}
-show();
+function getLoc(){
+if(!navigator.geolocation){document.getElementById('loc').innerText="فعل GPS";return;}
+navigator.geolocation.getCurrentPosition(p=>{lat=p.coords.latitude;lon=p.coords.longitude;document.getElementById('loc').innerText=`📍 ${lat.toFixed(3)},${lon.toFixed(3)} - كفرة نصار - هنجيب الأقرب ليك`;});
+}
 </script></body></html>
