@@ -77,7 +77,6 @@ r.style.display='block';
 if(!qr) qr=new Html5Qrcode("reader");
 qr.start({facingMode:"environment"},{fps:10,qrbox:260},d=>{document.getElementById('q').value=d;qr.stop();r.style.display='none';show();},()=>{});
 }
-
 if(navigator.geolocation){
 navigator.geolocation.getCurrentPosition(pos=>{
 document.getElementById('loc').innerText=`📍 ${pos.coords.latitude.toFixed(4)},${pos.coords.longitude.toFixed(4)} - كفرة نصار، الجيزة - تم التحقق الآن`;
