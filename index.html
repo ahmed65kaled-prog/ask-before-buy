@@ -1,83 +1,75 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>اسأل قبل ما تشتري - عالمي شامل</title>
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>اسأل قبل ما تشتري - عالمي</title>
 <style>
 body{background:#020617;color:#fff;font-family:system-ui;padding:12px;margin:0}
 .card{background:#1e293b;border-radius:18px;padding:14px;margin:12px 0;border:1px solid #334155}
-.kcal{font-size:32px;font-weight:900}.ok{color:#22c55e}.mid{color:#facc15}.bad{color:#ef4444}
+.kcal{font-size:32px;font-weight:900}.ok{color:#22c55e}.bad{color:#ef4444}.mid{color:#facc15}
 .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
-.box{background:#0f172a;padding:10px;border-radius:12px;text-align:center;font-size:13px}
-.box b{display:block;font-size:18px;margin-top:4px}
+.box{background:#0f172a;padding:10px;border-radius:12px;text-align:center;font-size:12px}
+.box b{display:block;font-size:17px;margin-top:4px}
 .badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;margin:3px}
 input,button{width:100%;padding:16px;border-radius:14px;border:none;font-size:18px;box-sizing:border-box;margin:6px 0}
-button{background:#22c55e;color:#000;font-weight:800;cursor:pointer}
-#cam{width:100%;border-radius:14px;display:none;background:#000}
-.flag{font-size:20px}
+button{background:#22c55e;color:#000;font-weight:800}
+#reader{width:100%;border-radius:14px;overflow:hidden;display:none}
 </style></head><body>
-<h2>🌍 اسأل قبل ما تشتري - عالمي شامل</h2>
-<p style="opacity:.7">📸 صور الباركود أو اكتب أي باركود من أي دولة - 622 مصر وكل العالم</p>
-
-<button onclick="startCam()">📷 افتح الكاميرا وامسح الباركود</button>
-<video id="cam" autoplay playsinline></video>
-<canvas id="cvs" style="display:none"></canvas>
-
-<input id="bc" placeholder="أو اكتب الباركود: 6223001360056 أو 5000157027893">
+<h2>🌍 اسأل قبل ما تشتري</h2>
+<button onclick="startCam()">📷 افتح الكاميرا - امسح أي باركود</button>
+<div id="reader"></div>
+<input id="bc" placeholder="أو اكتب الباركود: 6223001360056">
 <div id="res"></div>
 
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.10/html5-qrcode.min.js"></script>
 <script>
-const COUNTRY={622:'🇪🇬 مصر',729:'🇮🇱 اسرائيل',500:'🇬🇧 بريطانيا',544:'🇧🇪 بلجيكا',400:'🇩🇪 ألمانيا',890:'🇮🇳 الهند',690:'🇨🇳 الصين',691:'🇨🇳 الصين',692:'🇨🇳 الصين',885:'🇹🇭 تايلاند',880:'🇰🇷 كوريا',490:'🇯🇵 اليابان',300:'🇫🇷 فرنسا',800:'🇮🇹 ايطاليا',840:'🇪🇸 اسبانيا',871:'🇳🇱 هولندا',900:'🇦🇹 النمسا',489:'🇭🇰 هونج كونج',000:'🌐 عالمي'};
-function countryFrom(code){let p=code.substring(0,3); return COUNTRY[p]||COUNTRY[p[0]+'00']||'🌍 منتج عالمي'}
-function evalFood(kcal,fat,sugar,salt){
- let t=[];
- if(kcal==0) t.push('<span class=badge style=background:#14532d>💧 0 سعرات - ممتاز للدايت</span>');
- else if(kcal<80) t.push('<span class=badge style=background:#14532d>✅ قليل السعرات - ينفع للدايت</span>');
- else if(kcal>250) t.push('<span class=badge style=background:#7f1d1d>❌ عالي السعرات جدا</span>');
- if(sugar>15) t.push('<span class=badge style=background:#7f1d1d>⚠️ سكريات عالية - خطر للسكر</span>');
- else if(sugar<5) t.push('<span class=badge style=background:#14532d>✅ قليل السكر</span>');
- if(fat>15) t.push('<span class=badge style=background:#7f1d1d>🧈 دهون عالية - غازات</span>');
- if(salt>1.5) t.push('<span class=badge style=background:#7f1d1d>🧂 ملح عالي - لا ينفع للضغط العالي</span>');
- return t.join(' ');
+// قاعدة مصرية جاهزة - لو المنتج مش في العالمي نطلعه من هنا
+const LOCAL_DB={
+"6223001360056":{name:"مياه أكوافينا",en:"Aquafina",brand:"Aquafina",country:"🇪🇬 مصر",img:"https://images.openfoodfacts.org/images/products/622/300/136/0056/front_en.3.400.jpg",kcal:0,fat:0,sugar:0,salt:0,prot:0,sat:0,water:100,ing:"مياه طبيعية نقية",benefit:"💧 ترطيب ممتاز - 0 سعرة - مناسب للدايت والرياضة والصيام - يساعد الكلى"},
+"6221001095769":{name:"شيبسي ملح",en:"Chipsy",brand:"Chipsy",country:"🇪🇬 مصر",kcal:536,fat:34,sugar:3,salt:1.8,prot:6,sat:15,water:2,ing:"بطاطس - زيت نباتي - ملح",benefit:"⚠️ عالي السعرات والدهون - يسبب زيادة وزن وغازات - كمية قليلة فقط"},
+"5449000000996":{name:"كوكاكولا",en:"Coca Cola",country:"🇧🇪 بلجيكا",kcal:42,fat:0,sugar:10.6,salt:0,prot:0,sat:0,water:89,ing:"مياه غازية - سكر - كافيين",benefit:"❌ سكر عالي وغازات - لا ينفع للدايت ولا لمرضى السكر - يسبب انتفاخ"},
+"5000157027893":{name:"كيت كات",en:"KitKat",country:"🇬🇧 بريطانيا",kcal:518,fat:26,sugar:48,salt:0.2,prot:6,sat:15,ing:"شوكولاتة - سكر - دقيق",benefit:"❌ عالي السكر والدهون - سعرات عالية جدا"}
+};
+
+function showLocal(code){
+ let p=LOCAL_DB[code];
+ if(!p) return false;
+ document.getElementById('res').innerHTML=`
+ <div class=card>
+  <div style=display:flex;gap:12px><img src="${p.img||''}" style="width:90px;height:90px;object-fit:cover;border-radius:14px;background:#000"><div><h3 style=margin:0>${p.name}</h3><div>${p.country} - ${p.brand||''}</div><div style=opacity:.6;font-size:12px>${code}</div></div></div>
+  <div class="kcal ${p.kcal==0?'ok':p.kcal>250?'bad':'mid'}">${p.kcal} سعرة / 100g</div>
+  <div class=grid>
+   <div class=box>🧈 دهون<b>${p.fat}g</b></div><div class=box>🍬 سكر<b>${p.sugar}g</b></div><div class=box>🧂 ملح<b>${p.salt}g</b></div>
+   <div class=box>💪 بروتين<b>${p.prot}g</b></div><div class=box>💔 مشبعة<b>${p.sat}g</b></div><div class=box>💧 ماء<b>${p.water}%</b></div>
+  </div>
+  <div style="background:#14532d;padding:10px;border-radius:10px;margin-top:8px">${p.benefit}</div>
+  <div style="background:#020617;padding:8px;border-radius:10px;margin-top:8px;font-size:12px">📋 المكونات: ${p.ing}</div>
+ </div>`; return true;
 }
+
 async function get(code){
- code=String(code).replace(/\D/g,''); if(code.length<8) return;
+ code=String(code).replace(/\D/g,''); if(code.length<7) return;
  document.getElementById('bc').value=code;
- document.getElementById('res').innerHTML='⏳ جاري البحث في قاعدة بيانات العالم '+countryFrom(code)+'...';
+ if(showLocal(code)) return; // لو عندنا مصري نطلعه فورا
+
+ document.getElementById('res').innerHTML='⏳ ببحث في قاعدة العالم...';
  try{
   let r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
   let j=await r.json();
-  if(j.status==0){
-   document.getElementById('res').innerHTML=`<div class=card>🔍 الباركود <b>${code}</b> ${countryFrom(code)}<br>مش متسجل في قاعدة الأكل العالمية - بس ده <b>${countryFrom(code)}</b><br><br>جرب: 6223001360056 (مصر) أو 5449000000996 (كوكاكولا)</div>`; return;
-  }
+  if(j.status==0){ document.getElementById('res').innerHTML=`<div class=card>🔍 ${code} غير مسجل - بس تقدر تضيفه في LOCAL_DB - جرب 6223001360056</div>`; return; }
   let p=j.product; let n=p.nutriments||{};
-  let kcal=n['energy-kcal_100g']||n['energy-kcal']||0;
-  let fat=n.fat_100g||0; let sugar=n.sugars_100g||0; let salt=n.salt_100g||0; let prot=n.proteins_100g||0; let sat=n['saturated-fat_100g']||0;
-  let name=p.product_name_ar||p.product_name||'منتج غذائي';
-  let img=p.image_front_url||p.image_url||'';
+  let kcal=n['energy-kcal_100g']||0,fat=n.fat_100g||0,sugar=n.sugars_100g||0,salt=n.salt_100g||0,prot=n.proteins_100g||0,sat=n['saturated-fat_100g']||0;
   document.getElementById('res').innerHTML=`
-   <div class=card>
-    <div style=display:flex;gap:12px><img src="${img}" style="width:90px;height:90px;object-fit:cover;border-radius:14px;background:#000"><div><h3 style=margin:0>${name}</h3><div class=flag>${countryFrom(code)} - ${p.brands||''}</div><div style=opacity:.6;font-size:12px>باركود: ${code}</div></div></div>
-    <div class="kcal ${kcal==0?'ok':kcal>200?'bad':'mid'}">${kcal} سعرة حرارية / 100g</div>
-    ${evalFood(kcal,fat,sugar,salt)}
-    <div class=grid>
-     <div class=box>🧈 دهون<b>${fat}g</b></div>
-     <div class=box>🍬 سكر<b>${sugar}g</b></div>
-     <div class=box>🧂 ملح<b>${salt}g</b></div>
-     <div class=box>💪 بروتين<b>${prot}g</b></div>
-     <div class=box>💔 مشبعة<b>${sat}g</b></div>
-     <div class=box>💧 ماء<b>${n.water_100g||'-'}%</b></div>
-    </div>
-    <div style="background:#020617;padding:10px;border-radius:10px;margin-top:8px">
-     <b>💡 الفائدة / الضرر:</b><br>
-     ${kcal==0?'💧 ترطيب ممتاز - 0 سعرات - مناسب للدايت والرياضة والصيام، يساعد الكلى وتنقية الجسم':kcal<100?'✅ خفيف على المعدة، ينفع سناك للدايت، سعرات قليلة':'⚠️ سعرات عالية تعطي طاقة سريعة لكن كثرة استهلاكه تسبب زيادة وزن وغازات وانتفاخ'}
-    </div>
-    <div style="background:#1e3a8a;padding:8px;border-radius:10px;margin-top:8px;font-size:12px">📋 المكونات: ${p.ingredients_text_ar||p.ingredients_text||'غير مسجلة'}</div>
-   </div>`;
- }catch(e){ document.getElementById('res').innerHTML='❌ انترنت ضعيف - جرب تاني'; }
+   <div class=card><h3>${p.product_name||'منتج'}</h3><div class="kcal ${kcal>200?'bad':'ok'}">${kcal} سعرة</div>
+   <div class=grid><div class=box>🧈<b>${fat}g</b></div><div class=box>🍬<b>${sugar}g</b></div><div class=box>🧂<b>${salt}g</b></div></div>
+   <div style="background:#14532d;padding:10px;border-radius:10px">${kcal==0?'ممتاز للدايت':kcal<100?'ينفع للدايت':'عالي السعرات'}</div></div>`;
+ }catch(e){ document.getElementById('res').innerHTML='❌ انترنت ضعيف'; }
 }
-let qr;
+
+let html5Qr;
 function startCam(){
- document.getElementById('cam').style.display='block';
- if(!qr) qr=new Html5Qrcode("cam");
- qr.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{get(txt); qr.stop(); document.getElementById('cam').style.display='none';}).catch(()=>{document.getElementById('res').innerHTML='❌ الكاميرا محتاجة https - افتح من ask-before-buy.pages.dev مش من github';});
+ document.getElementById('reader').style.display='block';
+ html5Qr=new Html5Qrcode("reader");
+ html5Qr.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:250}},
+  (txt)=>{ get(txt); html5Qr.stop(); document.getElementById('reader').style.display='none'; },
+  ()=>{}
+ ).catch(err=>{ document.getElementById('res').innerHTML='❌ لازم تفتح من https://ask-before-buy.pages.dev - الكاميرا مش بتشتغل من صفحة github'; });
 }
 document.getElementById('bc').addEventListener('input',e=>get(e.target.value));
 get('6223001360056');
