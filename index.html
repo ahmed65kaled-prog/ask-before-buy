@@ -1,11 +1,48 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b6fa4">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="اسأل قبل ما تشتري">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b6fad">
+<title>اسأل قبل ما تشتري - مصر</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png"><title>اسأل قبل ما تشتري</title><link rel="stylesheet" href="styles.css"></head><body>
-<div id="offline-status" class="offline-status" aria-live="polite"></div><section id="sync-center" class="sync-center" aria-live="polite"><b>مركز المزامنة</b><span id="sync-state">جاري التحقق…</span><button id="retry-sync" hidden>إعادة المحاولة</button></section><main><header><b>🛒 اسأل قبل ما تشتري</b><select id="country"><option>🇪🇬 مصر</option><option>🇸🇦 السعودية</option><option>🇦🇪 الإمارات</option><option>🇰🇼 الكويت</option><option>🇶🇦 قطر</option><option>🇧🇭 البحرين</option><option>🇴🇲 عُمان</option><option>🇯🇴 الأردن</option><option>🇲🇦 المغرب</option><option>🇩🇿 الجزائر</option><option>🇹🇳 تونس</option><option>🇱🇧 لبنان</option></select></header><section class="hero"><h1>قبل ما تشتري… اسأل.</h1><p>صوّر المنتج أو ابحث عنه، وسنرتّب لك أهم المعلومات قبل الدفع.</p><div class="actions"><label>📷 البحث بالصورة<input id="image" type="file" accept="image/*"></label><button id="barcode">▣ مسح باركود</button><button id="nearby-prices">📍 أسعار ومتاجر قريبة</button></div><div class="search"><input id="query" placeholder="اسم المنتج أو الموديل"><button id="search">بحث</button></div><small id="status">جاهز.</small></section><section id="report" class="report hidden"></section><footer>المعلومات الموثقة تظهر مع المصدر ووقت التحقق. الصورة وحدها ليست إثباتًا للأصالة.</footer></main><script src="app.js"></script><script src="./v80-purchase-decision.js"></script><script src="./product-lookup.js"></script><script src="./offline.js"></script><script src="./offline-v47.js"></script><script src="./offline-v48.js"></script><script src="./barcode-v49.js"></script>
-<script src="./v66-trust-deal-guard.js"></script><script src="./v68-final-ui.js"></script><script src="./v69-release-ui.js"></script></body></html>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{font-family:system-ui;background:#f1f5f9;margin:0;padding:12px}
+.card{background:#fff;border-radius:22px;padding:20px;max-width:500px;margin:20px auto;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+h1{margin:0;text-align:center;font-size:22px}
+.sub{color:#64748b;text-align:center;font-size:13px;margin:8px 0 14px}
+input{width:100%;padding:16px;border:2px solid #0f172a;border-radius:14px;font-size:18px}
+.btn-scan{width:100%;padding:16px;background:#0f172a;color:#fff;border:0;border-radius:14px;font-weight:800;font-size:18px;margin-top:10px}
+.btn{display:block;width:100%;padding:14px;border-radius:12px;text-align:center;text-decoration:none;font-weight:800;margin:8px 0}
+.c{background:#004ea8;color:#fff}.a{background:#ff9900;color:#000}.j{background:#f68b1e;color:#fff}.n{background:#feee00;color:#000}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🇪🇬 اسأل قبل ما تشتري</h1>
+<p class="sub">اكتب الباركود 622 وشوف سعره الحقيقي في مصر</p>
+<input id="q" placeholder="مثال: 6223001360056" value="6223001360056">
+<button class="btn-scan" onclick="go()">🔍 ابحث في مصر</button>
+<div id="r"></div>
+<p style="text-align:center;color:#94a3b8;font-size:11px;margin-top:16px">لو بدأ بـ 622 = منتج مصري ✔️</p>
+</div>
+<script>
+function go(){
+ let v=document.getElementById('q').value.trim()||'6223001360056';
+ let e=encodeURIComponent(v);
+ let egy=v.startsWith('622')?'<span style="background:#16a34a;color:#fff;padding:2px 8px;border-radius:99px;font-size:12px">✔ مصري</span>':'';
+ document.getElementById('r').innerHTML=`
+ <div style="margin-top:18px;padding:14px;background:#f0fdf4;border:2px solid #16a34a;border-radius:14px">
+ <p><b>${v}</b> ${egy}</p>
+ <a class="btn c" href="https://www.carrefouregypt.com/search?q=${e}" target="_blank">🛒 كارفور مصر</a>
+ <a class="btn a" href="https://www.amazon.eg/s?k=${e}" target="_blank">📦 أمازون مصر</a>
+ <a class="btn j" href="https://www.jumia.com.eg/catalog/?q=${e}" target="_blank">🟠 جوميا مصر</a>
+ <a class="btn n" href="https://www.noon.com/egypt/search?q=${e}" target="_blank">🟡 نون مصر</a>
+ <a class="btn" style="background:#111;color:#fff" href="https://www.google.com/search?q=${e}+site:carrefouregypt.com+OR+site:amazon.eg+OR+site:jumia.com.eg" target="_blank">🔎 بحث شامل</a>
+ </div>`;
+}
+go();
+</script>
+</body>
+</html>
