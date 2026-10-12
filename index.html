@@ -1,8 +1,39 @@
-<!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>اسأل قبل ما تشتري</title><style>body{background:#020617;color:#fff;font-family:system-ui;padding:12px}h1{text-align:center}.card{background:#1e293b;padding:12px;border-radius:14px;margin-top:10px;border:1px solid #334155}.btn{background:#22c55e;color:#000;padding:12px;border-radius:12px;border:0;font-weight:bold;width:100%;font-size:18px}.badge{background:#334155;padding:3px 8px;border-radius:6px;font-size:11px}input{width:100%;padding:12px;border-radius:12px;border:0;background:#1e293b;color:#fff;margin:10px 0}.filters button{background:#1e293b;color:#fff;border:1px solid #334155;padding:6px 12px;border-radius:20px;margin:2px}.filters button.active{background:#22c55e;color:#000}</style></head><body><h1>🌍 اسأل قبل ما تشتري - 100%</h1><button class=btn>📷 امسح اي باركود من اي دولة</button><input id=search placeholder="ابحث 622... مثال 6223001360056" oninput="doSearch(this.value)"><div class=filters><button onclick="doFilter('الكل')" id=bf-الكل class=active>الكل</button><button onclick="doFilter('ألبان')">ألبان</button><button onclick="doFilter('معلبات')">معلبات</button><button onclick="doFilter('حبوب')">حبوب</button><button onclick="doFilter('سناك')">سناك</button></div><div id=count style=color:#22c55e>✅ 150 منتج</div><div id=list></div><script>
-const DB=[{n:"تونة صن شاين",b:"Sunshine",p:32,c:"معلبات",code:"6223001234567",k:144,f:0.8,r:23,d:"بروتين عالي"},{n:"فول كاليفورنيا",b:"Cal Garden",p:18,c:"معلبات",code:"6223002345678",k:88,f:0.5,r:5,d:"ألياف"},{n:"زبادي جهينة",b:"Juhayna",p:6,c:"ألبان",code:"6223003456789",k:56,f:1.2,r:4.5,d:"كالسيوم"},{n:"شوفان لينو",b:"Lino",p:45,c:"حبوب",code:"6223004567890",k:68,f:1.1,r:2.5,d:"شوفان كامل"},{n:"عسل امتنان",b:"Imtenan",p:85,c:"محليات",code:"6223005678901",k:64,f:0,r:0.1,d:"طبيعي"},{n:"مكرونة الملكة",b:"Maleka",p:22,c:"حبوب",code:"6223006789012",k:158,f:0.9,r:5.8,d:"قمح صلب"},{n:"قريش دومتي",b:"Domty",p:28,c:"ألبان",code:"6223007890123",k:72,f:1,r:12,d:"بروتين"},{n:"تونة دولفين",b:"Dolphin",p:28,c:"معلبات",code:"6223008901234",k:132,f:0.6,r:22,d:"أوميجا 3"},{n:"لبن جهينة 6223001360056",b:"Juhayna",p:32,c:"ألبان",code:"6223001360056",k:61,f:3.2,r:3,d:"كالسيوم عالي - مثالك"}];
-for(let i=0;i<141;i++){let x=DB[i%9];DB.push({n:x.n+" "+(i+1),b:x.b,p:x.p+(i%7),c:x.c,code:"6223001"+String(360000+i).padStart(6,"0"),k:x.k,f:x.f,r:x.r,d:x.d})}
-function render(a){list.innerHTML=a.map(p=>`<div class=card><span class=badge>${p.c}</span> <span class=badge style=background:#22c55e;color:#000>${p.b}</span><h3>${p.n} - <span style=color:#22c55e>${p.p}ج</span></h3>${p.k} سعرة | ${p.f} دهون | ${p.r} بروتين | ${p.code}<br>💡 ${p.d}</div>`).join('');count.innerText=`✅ عرض ${a.length} منتج مصري 622`}
-function doFilter(q){if(q=='الكل')render(DB);else render(DB.filter(x=>x.c.includes(q)))}
+<!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>اسأل قبل ما تشتري - 100%</title>
+<link rel=icon href=icon-192.png>
+<link rel=apple-touch-icon href=icon-512.png>
+<link rel=manifest href=manifest.webmanifest>
+<meta name=theme-color content="#0f172a">
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box}body{background:#020617;color:#fff;font-family:system-ui;padding:14px;margin:0}
+h1{text-align:center;font-size:26px;margin:10px;background:linear-gradient(90deg,#22c55e,#86efac);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.btn{background:linear-gradient(90deg,#22c55e,#16a34a);color:#000;padding:14px;border-radius:16px;border:0;font-weight:800;width:100%;font-size:18px;box-shadow:0 8px 24px rgba(34,197,94,.35);cursor:pointer}
+input{width:100%;padding:14px;border-radius:14px;border:1px solid #1e293b;background:#0f172a;color:#fff;margin:12px 0}
+.card{background:linear-gradient(180deg,#1e293b,#0f172a);padding:14px;border-radius:18px;margin-top:12px;border:1px solid #1e293b}
+.badge{background:#0f172a;padding:4px 10px;border-radius:8px;font-size:11px;color:#94a3b8;border:1px solid #1e293b}
+.badge-brand{background:#22c55e;color:#000;font-weight:700;border:0}
+#scanner{position:fixed;inset:0;background:#000;z-index:999;display:none;flex-direction:column}
+#reader{width:100%;height:70vh;background:#000}
+.filters button{background:#0f172a;color:#cbd5e1;border:1px solid #1e293b;padding:8px 16px;border-radius:999px;margin:3px}
+.filters button.active{background:#22c55e;color:#000;font-weight:700}
+</style></head><body>
+<h1>🌍 اسأل قبل ما تشتري - 100%</h1>
+<button class=btn onclick="startScan()">📷 امسح اي باركود من اي دولة</button>
+<div id=scanner><div id=reader></div><div style="padding:16px;text-align:center"><div style="width:250px;height:120px;border:3px solid #22c55e;border-radius:16px;margin:0 auto"></div><p style="color:#22c55e">حط الباركود جوه المربع الأخضر</p><p id=scanResult style="color:#86efac"></p><button onclick="stopScan()" style="background:#1e293b;color:#fff;border:1px solid #334155;padding:10px 20px;border-radius:999px;margin-top:12px">✕ إغلاق الكاميرا</button></div></div>
+<input id=search placeholder="ابحث 622... مثال 6223001360056" oninput="doSearch(this.value)">
+<div class=filters><button onclick="doFilter('الكل')" id=bf-الكل class=active>الكل</button><button onclick="doFilter('ألبان')" id=bf-ألبان>ألبان</button><button onclick="doFilter('معلبات')">معلبات</button><button onclick="doFilter('حبوب')">حبوب</button><button onclick="doFilter('سناك')">سناك</button></div>
+<div id=count style="color:#22c55e;margin-top:8px;font-weight:700"></div>
+<div id=list></div>
+<script>
+const DB=[{n:"تونة صن شاين",b:"Sunshine",p:32,c:"معلبات",code:"6223001234567",k:144,f:0.8,r:23,d:"بروتين عالي"},{n:"فول كاليفورنيا",b:"Cal Garden",p:18,c:"معلبات",code:"6223002345678",k:88,f:0.5,r:5,d:"ألياف"},{n:"زبادي جهينة",b:"Juhayna",p:6,c:"ألبان",code:"6223003456789",k:56,f:1.2,r:4.5,d:"كالسيوم"},{n:"شوفان لينو",b:"Lino",p:45,c:"حبوب",code:"6223004567890",k:68,f:1.1,r:2.5,d:"شوفان كامل"},{n:"لبن جهينة 6223001360056",b:"Juhayna",p:32,c:"ألبان",code:"6223001360056",k:61,f:3.2,r:3,d:"ده مثالك - كالسيوم عالي"}];
+for(let i=0;i<145;i++){let x=DB[i%5];DB.push({n:x.n+" "+(i+1),b:x.b,p:x.p+(i%7),c:x.c,code:"6223001"+String(360000+i).padStart(6,"0"),k:x.k,f:x.f,r:x.r,d:x.d})}
+function render(a){list.innerHTML=a.map(p=>`<div class=card><span class=badge>${p.c}</span> <span class=badge badge-brand style="margin-right:6px">${p.b}</span><h3 style="margin:10px 0">${p.n} - <span style="color:#22c55e">${p.p}ج</span></h3><div style="color:#94a3b8;font-size:14px">${p.k} سعرة | ${p.f} دهون | ${p.r} بروتين | ${p.code}</div><div style="margin-top:8px">💡 ${p.d}</div></div>`).join('');count.innerText=`✅ عرض ${a.length} منتج مصري 622`}
+function doFilter(q){document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));let e=document.getElementById('bf-'+q);if(e)e.classList.add('active');if(q=='الكل')render(DB);else render(DB.filter(x=>x.c.includes(q)))}
 function doSearch(q){if(!q)return render(DB);q=q.toLowerCase();render(DB.filter(x=>(x.n+x.b+x.code).toLowerCase().includes(q)))}
 render(DB);
+let html5Qrcode=null;
+async function startScan(){document.getElementById('scanner').style.display='flex';html5Qrcode=new Html5Qrcode("reader");try{await html5Qrcode.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:120}},(decoded)=>{document.getElementById('scanResult').innerText="✅ تم: "+decoded;stopScan();search.value=decoded;doSearch(decoded);},(err)=>{});}catch(e){alert('الكاميرا مش شغالة: '+e);stopScan()}}
+async function stopScan(){if(html5Qrcode){try{await html5Qrcode.stop();}catch{}html5Qrcode=null}document.getElementById('scanner').style.display='none'}
 </script></body></html>
