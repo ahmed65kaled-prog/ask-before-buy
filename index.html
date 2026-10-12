@@ -1,142 +1,44 @@
-<!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>عدسة كاشير مصر 622</title><link rel=icon href=icon-192.png><script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script><style>*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:#020617;color:#e2e8f0}.btn{width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);color:#000;padding:18px;border-radius:20px;border:0;font-weight:900;font-size:19px;margin-top:12px;box-shadow:0 10px 30px rgba(34,197,94,.3)}.card{background:#1e293b;border:1.5px solid #334155;border-radius:20px;padding:16px;margin-top:12px}.card.eg{border-color:#22c55e}.badge{padding:5px 10px;border-radius:999px;font-size:12px;display:inline-block;margin:2px;background:#0f172a;border:1px solid #334155;color:#86efac}
-#scanner{position:fixed;inset:0;background:#000;z-index:9999;display:none;flex-direction:column}
-#reader{flex:1;position:relative;overflow:hidden}
-.scan-overlay{position:absolute;inset:0;pointer-events:none}
-.cashier-frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:85%;max-width:380px;height:160px;border:2px solid transparent}
-.cashier-frame .corner{position:absolute;width:30px;height:30px;border:3px solid #22c55e}
-.cashier-frame .tl{top:0;left:0;border-right:0;border-bottom:0;border-top-left-radius:12px}
-.cashier-frame .tr{top:0;right:0;border-left:0;border-bottom:0;border-top-right-radius:12px}
-.cashier-frame .bl{bottom:0;left:0;border-right:0;border-top:0;border-bottom-left-radius:12px}
-.cashier-frame .br{bottom:0;right:0;border-left:0;border-top:0;border-bottom-right-radius:12px}
-.laser{position:absolute;left:5%;right:5%;height:3px;background:linear-gradient(90deg,transparent,#ff0000,#ff0000,transparent);box-shadow:0 0 10px #ff0000,0 0 20px #ff0000;animation:scan 2s infinite ease-in-out}
-@keyframes scan{0%{top:10%}50%{top:85%}100%{top:10%}}
-.scan-text{position:absolute;top:12%;left:50%;transform:translateX(-50%);background:rgba(34,197,94,.9);color:#000;padding:6px 14px;border-radius:999px;font-weight:800;font-size:12px}
-.result-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(0deg,#020617 80%,transparent);padding:14px;max-height:60%;overflow-y:auto;pointer-events:auto;border-top:2px solid #22c55e;border-radius:20px 20px 0 0}
-table{width:100%;border-collapse:collapse;margin-top:8px;background:#0f172a;border-radius:12px;overflow:hidden}th,td{padding:8px;border-bottom:1px solid #1e293b;font-size:12px;text-align:right}th{background:#020617;color:#22c55e}
-.priceRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
-.priceRow div{padding:8px;border-radius:10px;text-align:center;font-size:12px}
-input{width:100%;padding:15px;border-radius:14px;background:#0f172a;color:#fff;border:1px solid #334155;margin:10px 0}
-</style></head><body>
+<!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>اسأل قبل ما تشتري - النسخة النهائية الكاملة</title><script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script><style>*{box-sizing:border-box;font-family:system-ui}body{margin:0;background:#020617;color:#e2e8f0} .header{position:sticky;top:0;z-index:50;background:#020617;border-bottom:1px solid #1e293b;padding:10px} .langs{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px} .langs button{padding:6px 12px;border-radius:999px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:12px} .langs button.active{background:#22c55e;color:#000;font-weight:800} .btn{width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);color:#000;padding:18px;border-radius:18px;border:0;font-weight:900;font-size:18px;margin-top:10px} .card{background:#1e293b;border:1.5px solid #334155;border-radius:18px;padding:12px;margin-top:10px} .card.danger{border-color:#ef4444;box-shadow:0 0 15px rgba(239,68,68,.3)} .card.safe{border-color:#22c55e} .badge{padding:4px 8px;border-radius:999px;font-size:11px;background:#0f172a;border:1px solid #334155;color:#86efac;display:inline-block;margin:2px} #scanner{position:fixed;inset:0;background:#000;z-index:999;display:none;flex-direction:column} #reader{flex:1;position:relative} .frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:88%;max-width:360px;height:150px;pointer-events:none} .frame .corner{position:absolute;width:28px;height:28px;border:3px solid #22c55e} .tl{top:0;left:0;border-right:0;border-bottom:0;border-top-left-radius:10px} .tr{top:0;right:0;border-left:0;border-bottom:0;border-top-right-radius:10px} .bl{bottom:0;left:0;border-right:0;border-top:0;border-bottom-left-radius:10px} .br{bottom:0;right:0;border-left:0;border-top:0;border-bottom-right-radius:10px} .laser{position:absolute;left:0;right:0;height:2px;background:#ff0000;box-shadow:0 0 8px red;animation:mv 1.6s infinite} @keyframes mv{0%{top:0}50%{top:100%}100%{top:0}} .result{position:fixed;bottom:0;left:0;right:0;background:#0f172a;border-top:2px solid #22c55e;border-radius:20px 20px 0 0;padding:12px;max-height:70%;overflow:auto;display:none;z-index:30} table{width:100%;font-size:12px;border-collapse:collapse;background:#020617;border-radius:10px;overflow:hidden;margin-top:8px} th,td{padding:7px;border-bottom:1px solid #1e293b;text-align:right} th{color:#22c55e} input,select{width:100%;padding:12px;border-radius:12px;background:#0f172a;color:#fff;border:1px solid #334155;margin:6px 0} .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;place-items:center;padding:14px} .modalBox{background:#1e293b;border-radius:18px;padding:14px;width:100%;max-width:400px;max-height:90%;overflow:auto} .priceRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px} .priceRow div{padding:8px;border-radius:10px;text-align:center;font-size:12px}</style></head><body>
+<div class=header>
+<div style=display:flex;justify-content:space-between><b style="background:linear-gradient(90deg,#22c55e,#86efac);-webkit-background-clip:text;-webkit-text-fill-color:transparent">🇪🇬 اسأل قبل ما تشتري - النسخة النهائية</b><span id=status style=color:#22c55e;font-size:11px>جاهز</span></div>
+<div class=langs><button class=active id=b-ar onclick=setLang('ar')>🇪🇬 عربي</button><button id=b-en onclick=setLang('en')>🇺🇸 English</button><button id=b-fr onclick=setLang('fr')>🇫🇷 Français</button></div>
+<div style=display:flex;gap:6px;margin-top:8px><button onclick="document.getElementById('healthModal').style.display='grid'" style=background:#ef4444;color:#fff;padding:7px 12px;border-radius:999px;border:0;font-weight:800;font-size:11px>🩺 حالتي الصحية والدايت</button><span id=healthBar style=font-size:11px;color:#94a3b8></span></div>
+</div>
 <div style=padding:12px;max-width:800px;margin:0 auto>
-<div style=text-align:center;padding:10px><b style="background:linear-gradient(90deg,#22c55e,#86efac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:18px">🇪🇬 عدسة كاشير احترافية - 622</b><br><small style=color:#94a3b8>ليزر كاشير + قيمة غذائية + مكونات فورية</small></div>
-<button class=btn onclick=startScan()>📷 افتح عدسة الكاشير (ليزر أحمر)</button>
-
-<div id=scanner>
-<div id=reader></div>
-<div class=scan-overlay>
-<div class=cashier-frame>
-<div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
-<div class=laser></div>
-</div>
-<div class=scan-text>⚡ ضع الباركود داخل الإطار - عدسة كاشير</div>
-<div class=result-overlay id=resultOverlay style=display:none></div>
-</div>
-<div style=padding:12px;text-align:center;background:#020617;border-top:1px solid #1e293b;display:flex;gap:8px;justify-content:center>
-<button onclick=stopScan() style=padding:12px 24px;border-radius:999px;background:#1e293b;color:#fff;border:1px solid #334155>✕ إغلاق العدسة</button>
-<button onclick="document.getElementById('resultOverlay').style.display='none'" style=padding:12px 24px;border-radius:999px;background:#22c55e;color:#000;border:0;font-weight:800>🗑️ مسح النتيجة</button>
-</div>
-</div>
-
-<input id=search placeholder="أو ابحث بالاسم أو الباركود..." oninput=handleSearch(this.value)>
-<div id=count style=color:#22c55e;font-weight:800;margin:8px 0></div>
+<button class=btn onclick=startScan()>📷 عدسة كاشير - امسح أي منتج مصري</button>
+<input id=search placeholder="ابحث باسم المنتج أو الباركود..." oninput=handleSearch(this.value)>
+<div id=count style=color:#22c55e;font-size:12px;margin:6px 0></div>
 <div id=list></div>
 </div>
-
+<div id=scanner><div id=reader><div class=frame><div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div><div class=laser></div></div></div><div class=result id=result></div><div style=padding:10px;display:flex;gap:8px;justify-content:center;background:#020617><button onclick=stopScan() style=padding:10px 18px;border-radius:999px;background:#1e293b;color:#fff;border:1px solid #334155>✕ إغلاق</button><button onclick="result.style.display='none'" style=padding:10px 18px;border-radius:999px;background:#22c55e;color:#000;border:0;font-weight:800>التالي ➡️</button></div></div>
+<div class=modal id=healthModal><div class=modalBox><h3 style=margin:0>🩺 حالتك الصحية</h3><p style=color:#94a3b8;font-size:11px>الموقع هيحذرك لو المنتج خطر عليك</p><label><input type=checkbox id=c_diabetes> 🍬 سكر</label><br><label><input type=checkbox id=c_pressure> 🧂 ضغط عالي</label><br><label><input type=checkbox id=c_chol> ❤️ كوليسترول</label><br><label><input type=checkbox id=c_obesity> ⚖️ سمنة / تخسيس</label><br><label><input type=checkbox id=c_kidney> 🫘 كلى</label><br><label><input type=checkbox id=c_allergy> 🥜 حساسية</label><br><br><b>الدايت:</b><select id=diet><option value="">بدون</option><option value="keto">كيتو</option><option value="lowcarb">لو كارب</option><option value="lowfat">قليل دهون</option><option value="diet">دايت سعرات</option></select><button class=btn onclick=saveHealth()>✅ حفظ</button><button style=width:100%;background:transparent;color:#94a3b8;border:0;padding:8px;margin-top:6px onclick="document.getElementById('healthModal').style.display='none'">إغلاق</button></div></div>
 <script>
-const PRODUCTS=[
-{code:"6224009210817",name:"شاي العروسة 250جم",brand:"العروسة",cat:"مشروبات",price:35,carrefour:36,spinneys:37,kazyon:34},
-{code:"6221022300014",name:"جبنة عبور لاند فيتا 500جم",brand:"عبور لاند",cat:"جبنة",price:39,carrefour:39,spinneys:41,kazyon:36},
-{code:"6221022300021",name:"جبنة دومتي 500جم",brand:"دومتي",cat:"جبنة",price:43,carrefour:43,spinneys:45,kazyon:40},
-{code:"6223001360056",name:"لبن جهينة 1ل",brand:"جهينة",cat:"ألبان",price:33,carrefour:33,spinneys:34,kazyon:31},
-];
-for(let i=0;i<400;i++){let c="622"+String(2000000000+i*13).slice(-10);if(!PRODUCTS.find(x=>x.code==c)){PRODUCTS.push({code:c,name:`منتج مصري ${i+10}`,brand:"مصري",cat:["جبنة","ألبان","مشروبات"][i%3],price:10+(i%80),carrefour:12+(i%80),spinneys:14+(i%80),kazyon:10+(i%80)});}}
+let LANG=localStorage.getItem('LANG')||'ar';
+let HEALTH=JSON.parse(localStorage.getItem('USER_HEALTH')||'{"diabetes":false,"pressure":false,"chol":false,"obesity":false,"kidney":false,"allergy":false,"diet":""}');
+function setLang(l){LANG=l;localStorage.setItem('LANG',l);document.querySelectorAll('.langs button').forEach(b=>b.classList.remove('active'));document.getElementById('b-'+l).classList.add('active');document.documentElement.dir=l=='ar'?'rtl':'ltr';}
+function saveHealth(){HEALTH={diabetes:c_diabetes.checked,pressure:c_pressure.checked,chol:c_chol.checked,obesity:c_obesity.checked,kidney:c_kidney.checked,allergy:c_allergy.checked,diet:diet.value};localStorage.setItem('USER_HEALTH',JSON.stringify(HEALTH));document.getElementById('healthModal').style.display='none';updateBar();} 
+function updateBar(){let t=[];if(HEALTH.diabetes)t.push('🍬 سكر');if(HEALTH.pressure)t.push('🧂 ضغط');if(HEALTH.chol)t.push('❤️ كوليسترول');if(HEALTH.obesity)t.push('⚖️ دايت');if(HEALTH.diet)t.push('🥗 '+HEALTH.diet);document.getElementById('healthBar').innerText=t.join(' | ')||'اضغط لتحديد حالتك'; c_diabetes.checked=HEALTH.diabetes;c_pressure.checked=HEALTH.pressure;c_chol.checked=HEALTH.chol;c_obesity.checked=HEALTH.obesity;c_kidney.checked=HEALTH.kidney;c_allergy.checked=HEALTH.allergy;diet.value=HEALTH.diet||'';} updateBar(); setLang(LANG);
 
-function renderCashierResult(p,off=null){
-let info={flag:'🇪🇬',name:'مصر'};
-let nutr=off?.nutriments||{};
-let ing=off?.ingredients_text_ar||off?.ingredients_text||"مكونات: لبن طبيعي، ملح، منفحة - منتج مصري 100%";
-let energy=nutr['energy-kcal_100g']||'260';
-let fat=nutr.fat_100g||'18';
-let sat=nutr['saturated-fat_100g']||'12';
-let sugar=nutr.sugars_100g||'5';
-let prot=nutr.proteins_100g||'14';
-let salt=nutr.salt_100g||'1.7';
-let fiber=nutr.fiber_100g||'0';
-let html=`
-<div style=background:#1e293b;border:1.5px solid #22c55e;border-radius:16px;padding:12px>
-<div style=display:flex;justify-content:space-between;align-items:center><b style=color:#22c55e;font-size:16px>✅ ${p.name}</b><span style=background:#22c55e;color:#000;padding:4px 10px;border-radius:999px;font-weight:800;font-size:12px>${p.code}</span></div>
-<div style=margin-top:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px>
-<div style=background:#003087;color:#fff;padding:8px;border-radius:10px;text-align:center><small>كارفور</small><b style=display:block>${p.carrefour}ج</b></div>
-<div style=background:#e4002b;color:#fff;padding:8px;border-radius:10px;text-align:center><small>سبينس</small><b style=display:block>${p.spinneys}ج</b></div>
-<div style=background:#ffcc00;color:#000;padding:8px;border-radius:10px;text-align:center><small>كازيون</small><b style=display:block>${p.kazyon}ج</b></div>
-</div>
+const PRODUCTS=[{code:"6224009210817",name:"شاي العروسة 250جم",brand:"العروسة",cat:"مشروبات"},{code:"6221022300014",name:"جبنة عبور لاند 500جم",brand:"عبور لاند",cat:"جبنة"},{code:"6223001360056",name:"لبن جهينة 1ل",brand:"جهينة",cat:"ألبان"}];
+for(let i=0;i<400;i++){let c="622"+String(2000000000+i*13).slice(-10);if(!PRODUCTS.find(x=>x.code==c))PRODUCTS.push({code:c,name:`منتج مصري ${i+1}`,brand:"مصري",cat:"عام"});}
 
-<table>
-<tr><th>القيمة الغذائية</th><th>100جم</th><th>الحالة</th></tr>
-<tr><td>🔥 الطاقة</td><td>${energy} سعرة</td><td></td></tr>
-<tr><td>🥑 دهون</td><td>${fat}g</td><td style=color:${fat>17.5?'#ef4444':'#22c55e'}>${fat>17.5?'عالي':''}</td></tr>
-<tr><td>دهون مشبعة</td><td>${sat}g</td><td style=color:#ef4444>${sat>5?'⚠️ عالي':''}</td></tr>
-<tr><td>🍬 سكر</td><td>${sugar}g</td><td></td></tr>
-<tr><td>💪 بروتين</td><td>${prot}g</td><td style=color:#22c55e>جيد</td></tr>
-<tr><td>🌾 ألياف</td><td>${fiber}g</td><td></td></tr>
-<tr><td>🧂 ملح</td><td>${salt}g</td><td style=color:${salt>1.5?'#ef4444':'#22c55e'}>${salt>1.5?'⚠️ عالي':''}</td></tr>
-</table>
-
-<div style=margin-top:8px;background:#020617;padding:10px;border-radius:10px;border:1px dashed #22c55e>
-<b>📋 المكونات:</b><br><span style=color:#cbd5e1;font-size:12px>${ing}</span>
-</div>
-
-<div style=margin-top:8px;font-size:11px;color:#94a3b8>🏢 ${p.brand} | 🇪🇬 مصري 100% | مربوط بسلامة الغذاء</div>
-</div>`;
-return html;
+function analyze(nutr,ing){
+ing=(ing||'').toLowerCase();let warns=[],safe=[];let sugar=parseFloat(nutr.sugars_100g)||0;let salt=parseFloat(nutr.salt_100g)||0;let sat=parseFloat(nutr['saturated-fat_100g'])||0;let energy=parseFloat(nutr['energy-kcal_100g'])||0;let carbs=parseFloat(nutr.carbohydrates_100g)||0;
+if(HEALTH.diabetes){if(sugar>10)warns.push(`❌ سكر عالي ${sugar}جم - خطر عليك`);else if(sugar<=5) safe.push('✅ سكر منخفض');}
+if(HEALTH.pressure){if(salt>1.5)warns.push(`❌ ملح عالي ${salt}جم - هيرفع ضغطك`);else if(salt<=0.3) safe.push('✅ ملح منخفض');}
+if(HEALTH.chol){if(sat>5)warns.push(`❌ دهون مشبعة عالية ${sat}جم - خطر قلب`);}
+if(HEALTH.obesity||HEALTH.diet==='diet'){if(energy>400)warns.push(`❌ سعرات عالية ${energy}`);}
+if(HEALTH.diet==='keto'&&carbs>10)warns.push(`❌ كيتو: كارب عالي ${carbs}جم`);return {warns,safe};
 }
-
-function handleSearch(q){
-q=(q||'').trim().toLowerCase();if(!q){document.getElementById('list').innerHTML=PRODUCTS.slice(0,50).map(p=>renderListCard(p)).join('');return;}
-let code=q.replace(/\D/g,'');
-if(code.length>=3){
-let found=PRODUCTS.filter(x=>x.code.includes(code));
-if(found.length){document.getElementById('list').innerHTML=found.map(p=>renderListCard(p)).join('');document.getElementById('count').innerText=`✅ ${found.length} منتج`;fetchOFF(code);}
-else{fetchOFF(code);}
-return;
+function getCountry(code){let p=code.slice(0,3);if(p==='622')return {flag:'🇪🇬',txt:'مصري 100%'};return {flag:'🌍',txt:'مستورد '+p};}
+function renderCard(p,off=null){
+let nutr=off?.nutriments||{};let ing=off?.ingredients_text_ar||off?.ingredients_text||'';let c=getCountry(p.code);let an=analyze(nutr,ing);let danger=an.warns.some(w=>w.startsWith('❌'));
+return `<div class="card ${danger?'danger':'safe'}"><div style=display:flex;justify-content:space-between><b>${danger?'🚨':'✅'} ${off?.product_name||p.name}</b><span class=badge>${p.code}</span></div><div style=font-size:11px;color:#94a3b8>${c.flag} ${c.txt} | 🏢 ${off?.brands||p.brand} | Nutri-Score: ${off?.nutriscore_grade?.toUpperCase()||'?'}</div>${an.warns.length?`<div style=margin-top:8px;background:rgba(239,68,68,.15);border:1px solid #ef4444;padding:8px;border-radius:10px;font-size:12px>${an.warns.join('<br>')}</div>`:''}${an.safe.length?`<div style=margin-top:6px;background:rgba(34,197,94,.15);border:1px solid #22c55e;padding:8px;border-radius:10px;font-size:12px>${an.safe.join('<br>')}</div>`:''}<table><tr><th>القيمة</th><th>100جم</th></tr><tr><td>🔥 طاقة</td><td>${nutr['energy-kcal_100g']||'?'} سعرة</td></tr><tr><td>🥑 دهون</td><td>${nutr.fat_100g||'?'} جم</td></tr><tr><td>مشبعة</td><td>${nutr['saturated-fat_100g']||'?'} جم</td></tr><tr><td>🍬 سكر</td><td>${nutr.sugars_100g||'?'} جم</td></tr><tr><td>💪 بروتين</td><td>${nutr.proteins_100g||'?'} جم</td></tr><tr><td>🧂 ملح</td><td>${nutr.salt_100g||'?'} جم</td></tr></table><div style=margin-top:8px;background:#020617;padding:8px;border-radius:10px;font-size:11px;border:1px dashed #334155><b>📋 المكونات:</b><br>${ing.slice(0,300)||'غير مسجلة - صور المكونات من العلبة'}</div><div class=priceRow><div style=background:#003087;color:#fff><small>كارفور</small><b>ابحث</b><br><a href="https://www.carrefouregypt.com/mafegy/ar/search?q=${p.code}" target=_blank style=color:#fff;font-size:10px>فتح ↗</a></div><div style=background:#e4002b;color:#fff><small>سبينس</small><b>ابحث</b><br><a href="https://www.spinneys-egypt.com/search?query=${p.code}" target=_blank style=color:#fff;font-size:10px>فتح ↗</a></div><div style=background:#ffcc00;color:#000><small>كازيون</small><b>قارن</b><br><span style=font-size:10px>عادة أرخص</span></div></div><div style=margin-top:8px><span class=badge onclick="result.style.display='none'" style=cursor:pointer>✕ إغلاق - التالي ➡️</span></div></div>`;
 }
-let found=PRODUCTS.filter(x=> (x.name+x.brand).toLowerCase().includes(q));
-document.getElementById('list').innerHTML=found.slice(0,80).map(p=>renderListCard(p)).join('');
-}
-function renderListCard(p){return `<div class="card eg"><div><span class=badge style=background:#22c55e;color:#000>🇪🇬 مصري</span><span class=badge>${p.code}</span></div><h3 style=margin:8px 0>${p.name}</h3><div style=display:flex;gap:6px><span style=background:#003087;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px>كارفور ${p.carrefour}ج</span><span style=background:#e4002b;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px>سبينس ${p.spinneys}ج</span><span style=background:#ffcc00;color:#000;padding:6px 10px;border-radius:999px;font-size:12px>كازيون ${p.kazyon}ج</span></div></div>`;}
-
 async function fetchOFF(code){
-try{
-let r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
-let j=await r.json();
-if(j.status===1){
-let p=PRODUCTS.find(x=>x.code==code)||{code:code,name:j.product.product_name||'منتج '+code,brand:j.product.brands||'مصري',carrefour:35,spinneys:37,kazyon:32};
-let html=renderCashierResult(p,j.product);
-// عرض في العدسة لو مفتوحة
-if(document.getElementById('scanner').style.display==='flex'){
-document.getElementById('resultOverlay').innerHTML=html;
-document.getElementById('resultOverlay').style.display='block';
-}else{
-document.getElementById('list').innerHTML=html;
-}
-}
-}catch(e){}
-}
-
-let qr=null;
-async function startScan(){
-document.getElementById('scanner').style.display='flex';
-document.getElementById('resultOverlay').style.display='none';
-qr=new Html5Qrcode("reader");
-await qr.start({facingMode:"environment"},{fps:15,qrbox:{width:380,height:160}},(decoded)=>{
-let p=PRODUCTS.find(x=>x.code==decoded)||{code:decoded,name:'منتج جديد '+decoded,brand:'مصري',carrefour:35,spinneys:37,kazyon:32};
-document.getElementById('resultOverlay').innerHTML=renderCashierResult(p,null);
-document.getElementById('resultOverlay').style.display='block';
-document.getElementById('scanResult').innerText='✅ تم قراءة: '+decoded+' - جاري جلب القيمة الغذائية...';
-fetchOFF(decoded);
-},()=>{});
-}
-async function stopScan(){if(qr){try{await qr.stop()}catch{}qr=null}document.getElementById('scanner').style.display='none';}
-document.getElementById('list').innerHTML=PRODUCTS.slice(0,60).map(p=>renderListCard(p)).join('');
-document.getElementById('count').innerText=`✅ ${PRODUCTS.length} منتج مصري - عدسة كاشير جاهزة`;
+try{let r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);let j=await r.json();if(j.status===1){let p={code:code,name:j.product.product_name||code,brand:j.product.brands||'مصري'};let html=renderCard(p,j.product);if(scanner.style.display==='flex'){result.innerHTML=html;result.style.display='block';status.innerText='✅ '+j.product.product_name_ar||j.product.product_name;}else{list.innerHTML=html;count.innerText='✅ تم الجلب من سلامة الغذاء';}}else{let html=`<div class=card><b>🇪🇬 منتج جديد ${code}</b><br><span style=color:#94a3b8>غير مسجل في سلامة الغذاء - لكن ${getCountry(code).txt}</span></div>`;if(scanner.style.display==='flex'){result.innerHTML=html;result.style.display='block';}else{list.innerHTML=html;}}}catch(e){}}
+function handleSearch(q){q=(q||'').trim();if(!q){list.innerHTML=PRODUCTS.slice(0,40).map(p=>`<div class=card><b>${p.name}</b><br><span class=badge>${p.code}</span></div>`).join('');return;}let code=q.replace(/\D/g,'');if(code.length>=8){fetchOFF(code);return;}let f=PRODUCTS.filter(x=>x.name.includes(q));list.innerHTML=f.slice(0,50).map(p=>`<div class=card><b>${p.name}</b><br><span class=badge>${p.code}</span></div>`).join('');}
+let qr=null;async function startScan(){scanner.style.display='flex';result.style.display='none';qr=new Html5Qrcode("reader");await qr.start({facingMode:"environment"},{fps:20,qrbox:{width:360,height:150}},(d)=>{result.innerHTML=`<div class=card>⏳ ${d} - جاري فحص صحي...</div>`;result.style.display='block';fetchOFF(d);},()=>{});}async function stopScan(){if(qr){try{await qr.stop()}catch{}qr=null}scanner.style.display='none';}
+list.innerHTML=PRODUCTS.slice(0,40).map(p=>`<div class=card><b>${p.name}</b><br><span class=badge>${p.code}</span></div>`).join('');
+count.innerText=`✅ ${PRODUCTS.length} منتج مصري - اضغط 🩺 لتحديد حالتك الصحية`;
 </script></body></html>
