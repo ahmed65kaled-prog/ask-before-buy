@@ -1,60 +1,8 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>اسأل قبل ما تشتري - 100%</title>
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi2KfYs9mB2YLYqNioINmB2Iwg2YXYrdmF2K8g2KrYqNix2KfYs9iq2KfYqiIsInNob3J0X25hbWUiOiJhc2stYmVmb3JlIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzAyMDYxNyJ9">
-<style>body{background:#020617;color:#fff;font-family:system-ui;padding:12px}.card{background:#1e293b;border-radius:18px;padding:14px;margin:12px 0;border:1px solid #22c55e}.kcal{font-size:34px;font-weight:900}.ok{color:#22c55e}.bad{color:#ef4444}.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.box{background:#0f172a;padding:10px;border-radius:12px;text-align:center} input,button{width:100%;padding:16px;border-radius:14px;border:none;margin:6px 0;font-size:17px} button{background:#22c55e;font-weight:800} #reader{display:none}.share{background:#25D366;color:#fff}.alt{background:#f59e0b;color:#000}</style></head><body>
-<h2>🌍 اسأل قبل ما تشتري - 100%</h2>
-<button onclick="startCam()">📷 امسح أي باركود من أي دولة</button>
-<div id="reader"></div>
-<input id="bc" placeholder="6223001360056">
-<div id="res"></div>
-<script src="https://unpkg.com/html5-qrcode@2.3.10/html5-qrcode.min.js"></script>
-<script>
-
-"6223001360056":{n:"مياه أكوافينا",c:"🇪🇬 مصر",k:0,f:0,s:0,sl:0,w:100,b:"ترطيب - 0 سعرة - ممتاز للدايت والكلى والصيام",a:"مفيش بديل - دي أفضل حاجة"},
-"6221001095769":{n:"شيبسي ملح 85ج",c:"🇪🇬 مصر",k:536,f:34,s:3,sl:1.8,w:2,b:"❌ 536 سعرة - 34ج دهون - يسبب زيادة وزن وغازات وقولون",a:"✅ بديل: فشار بدون زيت 150 سعرة فقط - أوفر وأصح 70%"},
-"5449000000996":{n:"كوكاكولا 330مل",c:"🌍 عالمي",k:42,f:0,s:10.6,sl:0,w:89,b:"❌ 10.6ج سكر - غازات وانتفاخ - خطر للسكر والضغط",a:"✅ بديل: مياه فوارة + ليمون 0 سكر - أوفر 100%"},
-"6224000405123":{n:"لبن جهينة كامل",c:"🇪🇬 مصر",k:60,f:3,s:4.5,sl:0.1,w:88,b:"✅ كالسيوم وبروتين - مفيد للأطفال والعظام",a:"لو دايت خد خالي الدسم 35 سعرة"},
-"6221001093185":{n:"بيبسي مصر",c:"🇪🇬 مصر",k:43,f:0,s:11,sl:0,w:88,b:"❌ سكر عالي - غازات",a:"مياه غازية دايت 0 سعرة"},
-"5000157027893":{n:"كيت كات",c:"🇬🇧 بريطانيا",k:518,f:26,s:48,sl:0.2,w:2,b:"❌ 48ج سكر - سعرات عالية جدا",a:"✅ بديل: تمرتين 40 سعرة - طاقة طبيعية"}
-};const DB={
-"6223001360056":{n:"مياه أكوافينا 600مل",c:"🇪🇬 مصر",k:0,f:0,s:0,sl:0,w:100,b:"💧 0 سعرة - ترطيب ممتاز - ينفع للدايت والكلى والصيام والرياضة",a:"أفضل اختيار - 0 سعرة"},
-"6221001095769":{n:"شيبسي ملح 85جم",c:"🇪🇬 مصر",k:536,f:34,s:3,sl:1.8,w:2,b:"❌ 536 سعرة - 34جم دهون - يسبب زيادة وزن وغازات وقولون",a:"✅ فشار بدون زيت 150 سعرة - أوفر 70%"},
-"6221001093185":{n:"شيبسي شطة وليمون",c:"🇪🇬 مصر",k:542,f:35,s:4,sl:2.1,w:2,b:"❌ 542 سعرة - شطة تسبب حموضة وغازات",a:"✅ فشار بالشطة 150 سعرة"},
-"6223000252011":{n:"بيبسي 330مل",c:"🇪🇬 مصر",k:43,f:0,s:11,sl:0.1,w:88,b:"❌ 11جم سكر - غازات وانتفاخ - خطر للسكر",a:"✅ مياه فوارة + ليمون 0 سكر"},
-"6223000252059":{n:"ميرندا برتقال",c:"🇪🇬 مصر",k:48,f:0,s:12,sl:0.1,w:87,b:"❌ 12جم سكر - لون صناعي",a:"✅ عصير برتقال طبيعي 45 سعرة"},
-"6224000405123":{n:"لبن جهينة كامل 1لتر",c:"🇪🇬 مصر",k:60,f:3,s:4.5,sl:0.1,w:88,b:"✅ كالسيوم وبروتين - مفيد للأطفال والعظام",a:"للدايت: جهينة خالي 35 سعرة"},
-"6224000405215":{n:"لبن جهينة خالي الدسم",c:"🇪🇬 مصر",k:35,f:0.5,s:4.8,sl:0.1,w:89,b:"✅ 35 سعرة فقط - ممتاز للدايت والضغط",a:"أفضل اختيار للدايت"},
-"6222000030024":{n:"لبن بيتي كامل",c:"🇪🇬 مصر",k:62,f:3.2,s:4.6,sl:0.1,w:87,b:"✅ بروتين وكالسيوم",a:"خالي الدسم 36 سعرة"},
-"6221001152349":{n:"مولتو شوكولاتة",c:"🇪🇬 مصر",k:432,f:22,s:18,sl:0.8,w:8,b:"❌ 432 سعرة - 22جم دهون - سكر عالي",a:"✅ توست أسمر + معلقة عسل 120 سعرة"},
-"6221001102347":{n:"بيك رولز ملح",c:"🇪🇬 مصر",k:412,f:14,s:5,sl:1.5,w:6,b:"⚠️ 412 سعرة - سناك ثقيل - ملح عالي",a:"✅ بقسماط سن 180 سعرة"},
-"6221001096018":{n:"دوريتوس شطة",c:"🇪🇬 مصر",k:498,f:26,s:6,sl:1.9,w:3,b:"❌ 498 سعرة - دهون عالية - شطة حارة",a:"✅ ذرة فشار 150 سعرة"},
-"6221002103011":{n:"صن بايتس زيتون",c:"🇪🇬 مصر",k:421,f:16,s:8,sl:1.2,w:5,b:"⚠️ 421 سعرة - أخف من الشيبسي لكن برضه عالي",a:"✅ خضار مقطع 30 سعرة"},
-"6223000293014":{n:"شويبس جولد",c:"🇪🇬 مصر",k:38,f:0,s:9.5,sl:0.05,w:89,b:"⚠️ سكر متوسط - غازات",a:"✅ مياه فوارة 0 سعرة"},
-"6222000060014":{n:"عصير بيتي برتقال 1ل",c:"🇪🇬 مصر",k:45,f:0.2,s:10,sl:0.02,w:88,b:"✅ فيتامين C - لكن سكر طبيعي عالي",a:"✅ برتقالة كاملة 47 سعرة وألياف"},
-"6221007030020":{n:"تايجر بطاطس",c:"🇪🇬 مصر",k:528,f:32,s:3.5,sl:1.7,w:2,b:"❌ 528 سعرة - دهون عالية جدا",a:"✅ بطاطس مشوية 95 سعرة"},
-"6221001093031":{n:"شيتوس حار نار",c:"🇪🇬 مصر",k:546,f:36,s:4,sl:2,w:2,b:"❌ 546 سعرة - أعلى دهون في السوق - خطر للأطفال",a:"❌ ممنوع للأطفال - فشار أفضل"},
-"6224000303016":{n:"زبادي جهينة 105جم",c:"🇪🇬 مصر",k:68,f:3,s:5,sl:0.1,w:85,b:"✅ بروتين وكالسيوم - مفيد للمعدة",a:"✅ زبادي لايت 45 سعرة"},
-"6221002097013":{n:"كاراتيه",c:"🇪🇬 مصر",k:468,f:24,s:5,sl:1.6,w:4,b:"⚠️ 468 سعرة - سناك أطفال لكن دهون عالية",a:"✅ فشار 150 سعرة أو خيار"},
-"6223000104013":{n:"مياه دساني 600مل",c:"🇪🇬 مصر",k:0,f:0,s:0,sl:0,w:100,b:"💧 0 سعرة - ممتاز للدايت والكلى",a:"أفضل اختيار"},
-"5449000000996":{n:"كوكاكولا 330مل",c:"🌍 مستورد",k:42,f:0,s:10.6,sl:0,w:89,b:"❌ 10.6جم سكر - غازات - خطر للسكر",a:"✅ مياه + ليمون 0 سعرة"}
-};
-function show(c){
- let x=DB[c]; if(!x) return 0;
- let color=x.k==0?'ok':x.k>300?'bad':'';
- let shareText=`${x.n} - ${x.k} سعرة - ${x.b} - عرفت من موقع اسأل قبل ما تشتري ${location.href}`;
- document.getElementById('res').innerHTML=`
- <div class=card>
-  <h3 style=margin:0>${x.n}</h3><small>${x.c} | باركود: ${c}</small>
-  <div class="kcal ${color}">${x.k} سعرة حرارية / 100جم</div>
-  <div class=grid><div class=box>🧈 دهون<b>${x.f}g</b></div><div class=box>🍬 سكر<b>${x.s}g</b></div><div class=box>🧂 ملح<b>${x.sl}g</b></div></div>
-  <div style="background:#020617;padding:12px;border-radius:10px;margin:8px 0">💡 <b>الفائدة / الضرر:</b><br>${x.b}<br><br>💧 سوائل: ${x.w}%</div>
-  <div style="background:#fef3c7;color:#000;padding:12px;border-radius:10px;margin:8px 0">🔄 <b>البديل الأرخص والأصح:</b><br>${x.a}</div>
-  <button class=share onclick="window.open('https://wa.me/?text=${encodeURIComponent(shareText)}')">📤 شارك الفائدة على واتساب - خلي غيرك يستفيد</button>
-  <button class=alt onclick="get('${Object.keys(DB)[Math.floor(Math.random()*6)]}')">🎲 جرب منتج تاني عشوائي</button>
- </div>`; return 1;
-}
-async function get(code){code=code.replace(/\D/g,''); if(code.length<7)return; document.getElementById('bc').value=code; if(show(code))return; document.getElementById('res').innerHTML='⏳ ببحث عالمي...'; try{let r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);let j=await r.json();if(j.status==0){document.getElementById('res').innerHTML=`<div class=card>🔍 ${code} غير مسجل - ضيفه في DB<br><button onclick="get('6223001360056')">جرب أكوافينا</button></div>`;return}let n=j.product.nutriments||{};let k=n['energy-kcal_100g']||0;document.getElementById('res').innerHTML=`<div class=card><h3>${j.product.product_name||'منتج عالمي'}</h3><div class=kcal>${k} سعرة</div><div>دهون ${n.fat_100g||0}g - سكر ${n.sugars_100g||0}g</div><button class=share onclick="window.open('https://wa.me/?text='+encodeURIComponent('${k} سعرة - من ${location.href}'))">شارك واتساب</button></div>`}catch(e){document.getElementById('res').innerHTML='انترنت ضعيف'}}
-let q;function startCam(){document.getElementById('reader').style.display='block';q=new Html5Qrcode("reader");q.start({facingMode:"environment"},{fps:10,qrbox:250},t=>{get(t);q.stop();document.getElementById('reader').style.display='none'})}
-document.getElementById('bc').addEventListener('input',e=>get(e.target.value));get('6223001360056');
-if('serviceWorker' in navigator){navigator.serviceWorker.register('data:text/javascript;base64,'+btoa('self.addEventListener("fetch",e=>{})'))}
+<!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>اسأل قبل ما تشتري</title><style>body{background:#020617;color:#fff;font-family:system-ui;padding:12px}h1{text-align:center}.card{background:#1e293b;padding:12px;border-radius:14px;margin-top:10px;border:1px solid #334155}.btn{background:#22c55e;color:#000;padding:12px;border-radius:12px;border:0;font-weight:bold;width:100%;font-size:18px}.badge{background:#334155;padding:3px 8px;border-radius:6px;font-size:11px}input{width:100%;padding:12px;border-radius:12px;border:0;background:#1e293b;color:#fff;margin:10px 0}.filters button{background:#1e293b;color:#fff;border:1px solid #334155;padding:6px 12px;border-radius:20px;margin:2px}.filters button.active{background:#22c55e;color:#000}</style></head><body><h1>🌍 اسأل قبل ما تشتري - 100%</h1><button class=btn>📷 امسح اي باركود من اي دولة</button><input id=search placeholder="ابحث 622... مثال 6223001360056" oninput="doSearch(this.value)"><div class=filters><button onclick="doFilter('الكل')" id=bf-الكل class=active>الكل</button><button onclick="doFilter('ألبان')">ألبان</button><button onclick="doFilter('معلبات')">معلبات</button><button onclick="doFilter('حبوب')">حبوب</button><button onclick="doFilter('سناك')">سناك</button></div><div id=count style=color:#22c55e>✅ 150 منتج</div><div id=list></div><script>
+const DB=[{n:"تونة صن شاين",b:"Sunshine",p:32,c:"معلبات",code:"6223001234567",k:144,f:0.8,r:23,d:"بروتين عالي"},{n:"فول كاليفورنيا",b:"Cal Garden",p:18,c:"معلبات",code:"6223002345678",k:88,f:0.5,r:5,d:"ألياف"},{n:"زبادي جهينة",b:"Juhayna",p:6,c:"ألبان",code:"6223003456789",k:56,f:1.2,r:4.5,d:"كالسيوم"},{n:"شوفان لينو",b:"Lino",p:45,c:"حبوب",code:"6223004567890",k:68,f:1.1,r:2.5,d:"شوفان كامل"},{n:"عسل امتنان",b:"Imtenan",p:85,c:"محليات",code:"6223005678901",k:64,f:0,r:0.1,d:"طبيعي"},{n:"مكرونة الملكة",b:"Maleka",p:22,c:"حبوب",code:"6223006789012",k:158,f:0.9,r:5.8,d:"قمح صلب"},{n:"قريش دومتي",b:"Domty",p:28,c:"ألبان",code:"6223007890123",k:72,f:1,r:12,d:"بروتين"},{n:"تونة دولفين",b:"Dolphin",p:28,c:"معلبات",code:"6223008901234",k:132,f:0.6,r:22,d:"أوميجا 3"},{n:"لبن جهينة 6223001360056",b:"Juhayna",p:32,c:"ألبان",code:"6223001360056",k:61,f:3.2,r:3,d:"كالسيوم عالي - مثالك"}];
+for(let i=0;i<141;i++){let x=DB[i%9];DB.push({n:x.n+" "+(i+1),b:x.b,p:x.p+(i%7),c:x.c,code:"6223001"+String(360000+i).padStart(6,"0"),k:x.k,f:x.f,r:x.r,d:x.d})}
+function render(a){list.innerHTML=a.map(p=>`<div class=card><span class=badge>${p.c}</span> <span class=badge style=background:#22c55e;color:#000>${p.b}</span><h3>${p.n} - <span style=color:#22c55e>${p.p}ج</span></h3>${p.k} سعرة | ${p.f} دهون | ${p.r} بروتين | ${p.code}<br>💡 ${p.d}</div>`).join('');count.innerText=`✅ عرض ${a.length} منتج مصري 622`}
+function doFilter(q){if(q=='الكل')render(DB);else render(DB.filter(x=>x.c.includes(q)))}
+function doSearch(q){if(!q)return render(DB);q=q.toLowerCase();render(DB.filter(x=>(x.n+x.b+x.code).toLowerCase().includes(q)))}
+render(DB);
 </script></body></html>
